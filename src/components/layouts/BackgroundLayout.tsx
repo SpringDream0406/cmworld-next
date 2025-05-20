@@ -1,17 +1,17 @@
 "use client";
 
-import { useWeatherStore } from "@/store/weatherStore";
+import { useSettingStore } from "@/store/settingStore";
 import { ReactNode } from "react";
 
 export const BackgroundLayout = ({ children }: { children: ReactNode }) => {
-  const weather = useWeatherStore((state) => state.weather);
+  const background = useSettingStore((state) => state.background);
 
   //
   return (
     <div
       className="background-container"
       style={{
-        backgroundImage: `url("/images/backgrounds/${weather}.webp")`,
+        backgroundImage: `url("/images/backgrounds/${background}.webp")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

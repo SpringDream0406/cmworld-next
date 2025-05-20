@@ -38,6 +38,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${inter.variable}`}>
+        {/* 모바일인지, musicplayer 경로인지 체크 후 반영 */}
         <LayoutSelector>{children}</LayoutSelector>
       </body>
     </html>
