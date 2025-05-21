@@ -1,0 +1,1 @@
+export { guestbookImages } from "./guestbookImages";

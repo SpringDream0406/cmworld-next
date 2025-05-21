@@ -11,7 +11,9 @@ export const BackgroundLayout = ({ children }: { children: ReactNode }) => {
     <div
       className="background-container"
       style={{
-        backgroundImage: `url("/images/backgrounds/${background}.webp")`,
+        backgroundImage: `url("/images/backgrounds/${
+          background ? background : "Basic"
+        }.webp")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
