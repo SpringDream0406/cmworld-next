@@ -14,6 +14,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "CMWORLD",
   description: "춘몽의 CMWORLD입니다.",
+  metadataBase: new URL("https://cmworld.springdream.kr"),
   authors: [{ name: "SpringDream" }],
   openGraph: {
     type: "website",
@@ -37,6 +38,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <meta
+          name="google-site-verification"
+          content="ob8CiIUhwBqHkZ5d-Qepo7XYEmGL7gY2fRNRn7DKSPQ"
+        />
+      </head>
       <body className={`${inter.variable}`}>
         {/* 모바일인지, musicplayer 경로인지 체크 후 반영 */}
         <LayoutSelector>{children}</LayoutSelector>

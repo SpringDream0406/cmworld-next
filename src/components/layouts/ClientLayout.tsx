@@ -15,7 +15,7 @@ export const ClientLayout = ({ children }: { children: React.ReactNode }) => {
           <div className="w-full h-full common-border2 bg-gray-200 p-2">
             <div className="w-full h-full rounded-xl relative">
               {children}
-              <div className="absolute top-5 left-9991/10000">
+              <div className="absolute top-5 left-9988/10000">
                 <Navigation />
               </div>
             </div>

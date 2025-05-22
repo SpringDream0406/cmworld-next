@@ -13,6 +13,7 @@ export const LeftTopImage = () => {
           src={imgURL}
           alt="랜덤 방명록 이미지"
           fill
+          sizes="(max-width: 768px) 50vw, 30vw"
           style={{ objectFit: "cover" }}
           priority
         />

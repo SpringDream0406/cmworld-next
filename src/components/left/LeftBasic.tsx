@@ -13,7 +13,7 @@ export const LeftBasic = ({ leftContent }: LeftBasicProps) => {
       <div className="h-[30%]">{<LeftTopImage />}</div>
 
       {/* 컨텐츠 내용 */}
-      <div className="h-[60%]">{leftContent}</div>
+      <div className="h-[60%] p-1">{leftContent}</div>
 
       {/* 하단__ 이메일, 관련 사이트 */}
       <div className="h-[10%]">{<LeftBottom />}</div>

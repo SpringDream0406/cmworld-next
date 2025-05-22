@@ -1,4 +1,4 @@
-import { useSiteSelect } from "@/app/home/_hooks";
+import { useSiteSelect } from "@/hooks";
 import { ScSelect } from "../shadcn";
 
 export const LeftBottom = () => {
