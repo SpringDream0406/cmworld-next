@@ -43,6 +43,10 @@ export default function RootLayout({
           name="google-site-verification"
           content="ob8CiIUhwBqHkZ5d-Qepo7XYEmGL7gY2fRNRn7DKSPQ"
         />
+        <meta
+          name="naver-site-verification"
+          content="3d6acc45d674c841efc963f4f856354fc58296e7"
+        />
       </head>
       <body className={`${inter.variable}`}>
         {/* 모바일인지, musicplayer 경로인지 체크 후 반영 */}
