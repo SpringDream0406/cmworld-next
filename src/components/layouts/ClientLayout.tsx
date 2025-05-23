@@ -5,7 +5,7 @@ import MusicPlayer from "@/components/musicPlayer/MusicPlayer";
 
 export const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="h-full w-full flex py-14">
+    <div className="h-full w-full flex py-18">
       {/* 왼쪽 영역 */}
       <div className="w-[15%]"></div>
 

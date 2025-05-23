@@ -13,14 +13,24 @@ const inter = Inter({
 // 메타데이터 설정 (SEO 및 페이지 정보)
 export const metadata: Metadata = {
   title: "CMWORLD",
-  description: "춘몽의 CMWORLD입니다.",
+  description:
+    "춘몽월드(CMWORLD)는 싸이월드를 모티브로 한 개인 포트폴리오 사이트입니다.",
   metadataBase: new URL("https://cmworld.springdream.kr"),
   authors: [{ name: "SpringDream" }],
+  keywords: [
+    "춘몽",
+    "CMWORLD",
+    "춘몽월드",
+    "춘몽의 CMWORLD",
+    "싸이월드",
+    "cyworld",
+  ],
   openGraph: {
     type: "website",
     siteName: "CMWORLD",
     title: "춘몽월드",
-    description: "춘몽의 CMWORLD입니다.",
+    description:
+      "춘몽월드(CMWORLD)는 싸이월드를 모티브로 한 개인 포트폴리오 사이트입니다.",
     images: ["/favicon.png"],
   },
   twitter: {
