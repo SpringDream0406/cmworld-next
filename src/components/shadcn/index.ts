@@ -1,1 +1,1 @@
-export { ScSelect } from "./ScSelect";
+export * from "./ScSelect";

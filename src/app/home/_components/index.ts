@@ -1,2 +1,2 @@
-export { HomeLeftContent } from "./HomeLeftContent";
-export { HomeTop } from "./HomeTop";
+export * from "./HomeLeftContent";
+export * from "./HomeTop";

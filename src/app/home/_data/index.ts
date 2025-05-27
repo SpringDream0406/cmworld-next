@@ -1,2 +1,2 @@
-export { noticeList } from "./notices";
-export { updateVersionData } from "./updateVersionData";
+export * from "./notices";
+export * from "./updateVersionData";

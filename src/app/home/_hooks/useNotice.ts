@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { noticeList } from "../_data";
 
 export const useNotice = () => {
   // URL에서 공지사항 ID 가져오기
@@ -39,8 +40,12 @@ export const useNotice = () => {
     window.history.pushState({ path: newUrl }, "", newUrl);
   }, []);
 
+  const selectedNotice =
+    noticeList.find((notice) => notice.id === noticeId) || noticeList[0];
+
   return {
     noticeId,
     setNotice,
+    selectedNotice,
   };
 };

@@ -1,1 +1,1 @@
-export { guestbookImages } from "./guestbookImages";
+export * from "./guestbookImages";

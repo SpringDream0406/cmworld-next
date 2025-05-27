@@ -1,1 +1,2 @@
-export { ProfileLeftContent } from "./ProfileLeftContent";
+export * from "./ProfileLeftContent";
+export * from "./ProfileSection";

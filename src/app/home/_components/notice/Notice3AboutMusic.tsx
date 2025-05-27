@@ -31,7 +31,7 @@ export const Notice3AboutMusic = () => {
         </div>
         <div className="ml-6">
           <Image
-            src="/images/musicplayer.png"
+            src="/images/musicplayer.webp"
             alt="musicplayer"
             width={100}
             height={100}

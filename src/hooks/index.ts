@@ -1,2 +1,2 @@
-export { useRandomGuestbook } from "./useRandomGuestbook";
-export { useSiteSelect } from "./useSiteSelect";
+export * from "./useRandomGuestbook";
+export * from "./useSiteSelect";

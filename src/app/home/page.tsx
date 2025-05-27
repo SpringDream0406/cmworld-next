@@ -2,16 +2,10 @@
 
 import React from "react";
 import { HomeTop } from "./_components";
-import { useNotice } from "./_hooks/useNotice";
-import { noticeList } from "./_data";
+import { useNotice } from "./_hooks";
 
 export default function HomePage() {
-  // 커스텀 훅에서 noticeId 가져오기
-  const { noticeId, setNotice } = useNotice();
-
-  // 해당 ID에 맞는 공지사항 찾기
-  const selectedNotice =
-    noticeList.find((notice) => notice.id === noticeId) || noticeList[0];
+  const { noticeId, setNotice, selectedNotice } = useNotice();
 
   return (
     <div className="w-full h-full p-1">
