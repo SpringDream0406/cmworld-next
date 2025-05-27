@@ -23,7 +23,7 @@ export const Notice1UpdateInfo = () => {
         배포 버전의 자세한 변경사항이 궁금하신 분은{" "}
         <a
           href="https://springdream0406.tistory.com/114"
-          target="_black"
+          target="_blank"
           rel="noreferrer"
           className="text-blue-600 underline"
         >

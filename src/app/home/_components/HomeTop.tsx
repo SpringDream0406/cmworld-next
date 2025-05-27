@@ -1,9 +1,11 @@
 "use client";
 
-import { useNotice } from "../_hooks/useNotice";
+import { useNoticeStore } from "@/store/noticeStore";
+import { noticeList } from "../_data";
 
 export const HomeTop = () => {
-  const { notices, selectedNotice, setSelectNotice } = useNotice();
+  const noticeId = useNoticeStore((state) => state.noticeId);
+  const setNotice = useNoticeStore((state) => state.setNotice);
 
   return (
     <div className="h-full">
@@ -11,15 +13,15 @@ export const HomeTop = () => {
       <div className="h-[85%] flex flex-row">
         {/* 공지사항 */}
         <div className="w-[60%] h-full common-border">
-          {notices.map((notice, index) => (
+          {noticeList.map((notice, index) => (
             <div
               key={index}
               className="w-full h-[15%] flex justify-between p-3 cursor-pointer hover:underline"
-              onClick={() => setSelectNotice(notice.id)}
+              onClick={() => setNotice(notice.id)}
             >
               <div
                 className={`w-[70%] ${
-                  selectedNotice?.id === notice.id ? "text-basic" : ""
+                  noticeId === notice.id ? "text-basic" : ""
                 }`}
               >
                 {notice.title}
