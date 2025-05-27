@@ -17,7 +17,7 @@ export const IconItem = ({ item }: { item: TProfileItem }) => {
           />
         </div>
       )}
-      <div className="text-lg">{item.title}</div>
+      <div className="text-lg text-teal-00">{item.title}</div>
       {item.subtitle && (
         <div className="text-xs text-gray-500">{item.subtitle}</div>
       )}

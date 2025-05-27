@@ -22,27 +22,47 @@ export const profileData: ProfileSection[] = [
     itemTitle: "Skills",
     type: "icon",
     items: [
-      // { title: "HTML", icon: "HTML" },
-      // { title: "CSS", icon: "CSS" },
-      // { title: "JS", icon: "JS" },
       {
         title: "React.js",
         iconUrl:
-          "https://img.icons8.com/external-tal-revivo-color-tal-revivo/48/external-react-a-javascript-library-for-building-user-interfaces-logo-color-tal-revivo.png",
+          "https://img.icons8.com/external-tal-revivo-color-tal-revivo/144/external-react-a-javascript-library-for-building-user-interfaces-logo-color-tal-revivo.png",
       },
       {
         title: "Nextjs",
-        iconUrl: "https://img.icons8.com/color/48/nextjs.png",
+        iconUrl: "https://img.icons8.com/color/144/nextjs.png",
       },
-      { title: "Node.js", icon: "Node.js" },
-      // { title: "Express.js", icon: "Express.js" },
-      { title: "Nest.js", icon: "Nest.js" },
-      // { title: "Python", icon: "Python" },
-      { title: "MySQL", icon: "MySQL" },
-      { title: "ORACLE", icon: "ORACLE" },
-      { title: "Firebase", icon: "Firebase" },
-      { title: "AWS", icon: "AWS" },
-      { title: "Github", icon: "Github" },
+      {
+        title: "Node.js",
+        iconUrl: "https://img.icons8.com/color/144/nodejs.png",
+      },
+      {
+        title: "Nest.js",
+        iconUrl: "https://img.icons8.com/color/144/nestjs.png",
+      },
+      {
+        title: "PostgreSQL",
+        iconUrl: "https://img.icons8.com/color/144/postgreesql.png",
+      },
+      // {
+      //   title: "MySQL",
+      //   iconUrl: "https://img.icons8.com/color/144/mysql-logo.png",
+      // },
+      // {
+      //   title: "ORACLE",
+      //   iconUrl: "https://img.icons8.com/color/144/oracle-logo.png",
+      // },
+      // {
+      //   title: "Firebase",
+      //   iconUrl: "https://img.icons8.com/color/144/firebase.png",
+      // },
+      {
+        title: "AWS",
+        iconUrl: "https://img.icons8.com/color/144/amazon-web-services.png",
+      },
+      {
+        title: "Github",
+        iconUrl: "https://img.icons8.com/ios-glyphs/120/github.png",
+      },
     ],
   },
   // -----
