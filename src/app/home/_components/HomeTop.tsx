@@ -1,11 +1,14 @@
 "use client";
 
-import { useNoticeStore } from "@/store/noticeStore";
 import { noticeList } from "../_data";
 
-export const HomeTop = () => {
-  const noticeId = useNoticeStore((state) => state.noticeId);
-  const setNotice = useNoticeStore((state) => state.setNotice);
+interface HomeTopProps {
+  noticeId: number;
+  setNotice: (id: number) => void;
+}
+
+export const HomeTop = ({ noticeId, setNotice }: HomeTopProps) => {
+  // 커스텀 훅에서 noticeId와 setNotice 가져오기
 
   return (
     <div className="h-full">

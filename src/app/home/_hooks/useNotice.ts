@@ -1,49 +1,46 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { noticeList } from "../_data";
+import { useState, useEffect, useCallback } from "react";
 
 export const useNotice = () => {
   // URL에서 공지사항 ID 가져오기
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const noticeId = searchParams.get("notice");
+  const getNoticeIdFromUrl = useCallback(() => {
+    if (typeof window === "undefined") return 0;
 
-  // 현재 선택된 공지사항 상태
-  const [selectedNotice, setSelectedNotice] = useState(
-    noticeId
-      ? noticeList.find((notice) => notice.id === Number(noticeId)) ||
-          noticeList[0]
-      : noticeList[0]
-  );
+    const searchParams = new URLSearchParams(window.location.search);
+    const noticeParam = searchParams.get("notice");
+    return noticeParam ? parseInt(noticeParam) : 0;
+  }, []);
 
-  // URL 파라미터가 변경되면 선택된 공지사항 업데이트
+  // 현재 선택된 공지사항 ID 상태
+  const [noticeId, setNoticeId] = useState(getNoticeIdFromUrl());
+
+  // URL 변경 감지
   useEffect(() => {
-    if (noticeId) {
-      const notice = noticeList.find(
-        (notice) => notice.id === Number(noticeId)
-      );
-      if (notice) {
-        setSelectedNotice(notice);
-      }
-    } else {
-      // 기본값: 첫 번째 공지사항
-      setSelectedNotice(noticeList[0]);
-    }
-  }, [noticeId]);
+    const handleUrlChange = () => {
+      setNoticeId(getNoticeIdFromUrl());
+    };
 
-  // 공지사항 선택 함수
-  const setSelectNotice = (id: number) => {
-    // URL 파라미터 업데이트 (페이지 새로고침 없음)
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("notice", id.toString());
-    router.push(`?${params.toString()}`, { scroll: false });
-  };
+    window.addEventListener("popstate", handleUrlChange);
+
+    return () => {
+      window.removeEventListener("popstate", handleUrlChange);
+    };
+  }, [getNoticeIdFromUrl]);
+
+  // 공지사항 선택 함수 - URL 파라미터 업데이트
+  const setNotice = useCallback((id: number) => {
+    setNoticeId(id);
+
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set("notice", id.toString());
+
+    const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+    window.history.pushState({ path: newUrl }, "", newUrl);
+  }, []);
 
   return {
-    notices: noticeList,
-    selectedNotice,
-    setSelectNotice,
+    noticeId,
+    setNotice,
   };
 };
