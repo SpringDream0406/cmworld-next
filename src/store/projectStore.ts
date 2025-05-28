@@ -20,7 +20,10 @@ export const useProjectStore = create(
 
       // URL에서 초기 필터 값 읽기
       initFromUrl: () => {
-        set({ selectedTag: getUrlParam("tag", "Total") });
+        const tag = getUrlParam("tag", "Total");
+        if (tag !== "Total") {
+          set({ selectedTag: tag });
+        }
       },
     })
   )
