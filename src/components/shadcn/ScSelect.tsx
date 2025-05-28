@@ -6,13 +6,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export type SelectOption = {
+export type TSelectOption = {
   label: string;
   value: string;
 };
 
-interface ScSelectProps {
-  options: SelectOption[];
+interface IScSelectProps {
+  options: TSelectOption[];
   className?: string;
   placeholder?: string;
   onChange?: (value: string) => void;
@@ -25,7 +25,7 @@ export const ScSelect = ({
   options,
   onChange,
   defaultValue,
-}: ScSelectProps) => {
+}: IScSelectProps) => {
   return (
     <Select onValueChange={onChange} defaultValue={defaultValue}>
       <SelectTrigger className={`${className}`}>

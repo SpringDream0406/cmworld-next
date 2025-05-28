@@ -1,5 +1,5 @@
 // 프로젝트 데이터 타입 정의
-export interface ProjectData {
+export interface IProjectData {
   title: string;
   where: string;
   when: string;
@@ -11,7 +11,7 @@ export interface ProjectData {
       url: string;
     }[];
   };
-  tags: string[]; // category -> tags로 변경
+  tags: string[];
 }
 
 // 프로젝트 태그 레이블
@@ -19,13 +19,13 @@ export const projectTags = {
   total: "Total",
   team: "Team",
   personal: "Personal",
-  p2025: "2025",
-  p2024: "2024",
-  p2023: "2023",
+  y2025: "2025",
+  y2024: "2024",
+  y2023: "2023",
 } as const;
 
 // 프로젝트 데이터
-export const projectData: ProjectData[] = [
+export const projectData: IProjectData[] = [
   {
     title: "GoingTogether",
     where: "팀 프로젝트",
@@ -42,7 +42,7 @@ export const projectData: ProjectData[] = [
         },
       ],
     },
-    tags: [projectTags.team, projectTags.p2025], // projectTags 객체 사용
+    tags: [projectTags.team, projectTags.y2025],
   },
   {
     title: "CMSPP (CM Solar Power Plant)",
@@ -76,7 +76,7 @@ export const projectData: ProjectData[] = [
         },
       ],
     },
-    tags: [projectTags.personal, projectTags.p2024],
+    tags: [projectTags.personal, projectTags.y2024],
   },
   {
     title: "팜팜 서버 교체2",
@@ -113,7 +113,7 @@ export const projectData: ProjectData[] = [
         },
       ],
     },
-    tags: [projectTags.personal, projectTags.p2024],
+    tags: [projectTags.personal, projectTags.y2024],
   },
   {
     title: "CMWorld",
@@ -126,7 +126,7 @@ export const projectData: ProjectData[] = [
       "Firebase를 사용하여 방명록 페이지의 데이터를 처리했습니다.",
       "Redux를 사용하여 Component간의 데이터 전달을 처리했습니다.",
       "고정 페이지는 정적 Router로, 늘어나는 Component는 동적 Router로 처리했습니다.",
-      "(변경됨) AWS의 S3와 CloudFront를 이용하여 배포하고, Route53를 사용하여 도메인을 호스팅했습니다.",
+      "~~AWS의 S3와 CloudFront를 이용하여 배포하고, Route53를 사용하여 도메인을 호스팅했습니다.~~",
       "고정 지출을 줄이고 간편한 CI/CD를 사용하고자, 배포와 호스팅을 AWS에서 Netlify로 변경했습니다.",
     ],
     site: {
@@ -141,7 +141,7 @@ export const projectData: ProjectData[] = [
         },
       ],
     },
-    tags: [projectTags.personal, projectTags.p2024],
+    tags: [projectTags.personal, projectTags.y2024],
   },
   {
     title: "Noona-Music",
@@ -151,8 +151,8 @@ export const projectData: ProjectData[] = [
     exp: [
       "협업 경험과 JS의 기초를 다지기 위해 스터디 그룹에 참여하여 팀프로젝트를 진행했습니다.",
       "당시 공부중이던 모듈화를 활용해서 코드의 중복을 줄이기 위해 노력했습니다.",
-      "(변경됨) 프로젝트 후, API KEY를 숨기기 위해 Express.js를 사용하여 간단한 중간 서버를 만들었습니다.",
-      "프로젝트 후, API KEY를 숨기기 위해 netlify-functions를 사용했습니다.",
+      "~~프로젝트 후, API KEY를 숨기기 위해 Express.js를 사용하여 간단한 중간 서버를 만들었습니다.~~",
+      "~~프로젝트 후, API KEY를 숨기기 위해 netlify-functions를 사용했습니다.~~",
     ],
     site: {
       selectOptions: [
@@ -162,7 +162,7 @@ export const projectData: ProjectData[] = [
         },
       ],
     },
-    tags: [projectTags.team, projectTags.p2024],
+    tags: [projectTags.team, projectTags.y2024],
   },
   {
     title: "KEKEKE",
@@ -186,7 +186,7 @@ export const projectData: ProjectData[] = [
         },
       ],
     },
-    tags: [projectTags.team, projectTags.p2023],
+    tags: [projectTags.team, projectTags.y2023],
   },
   {
     title: "Seb's Music",
@@ -206,7 +206,7 @@ export const projectData: ProjectData[] = [
         },
       ],
     },
-    tags: [projectTags.team, projectTags.p2023],
+    tags: [projectTags.team, projectTags.y2023],
   },
   {
     title: "팜팜 서버 교체",
@@ -230,7 +230,7 @@ export const projectData: ProjectData[] = [
         },
       ],
     },
-    tags: [projectTags.personal, projectTags.p2023],
+    tags: [projectTags.personal, projectTags.y2023],
   },
   {
     title: "팜팜",
@@ -261,18 +261,6 @@ export const projectData: ProjectData[] = [
         },
       ],
     },
-    tags: [projectTags.team, projectTags.p2023],
+    tags: [projectTags.team, projectTags.y2023],
   },
 ];
-
-// 간단한 필터링 함수 (category -> tags로 변경)
-export const filterProjects = (
-  projects: ProjectData[],
-  selectedTag: string
-): ProjectData[] => {
-  if (selectedTag === projectTags.total) {
-    return projects;
-  }
-
-  return projects.filter((project) => project.tags.includes(selectedTag));
-};

@@ -1,15 +1,18 @@
 "use client";
 
 import { useProjectStore } from "@/store/projectStore";
-import { projectData, filterProjects } from "@/app/project/_data/projectData";
-import { ScSelect, SelectOption } from "@/components/shadcn/ScSelect";
+import { projectData } from "@/app/project/_data/projectData";
+import { ScSelect, TSelectOption } from "@/components/shadcn/ScSelect";
+import { openUrl } from "@/utils";
 
 export default function ProjectPage() {
   const { selectedTag } = useProjectStore();
+  const filteredProjects =
+    selectedTag === "Total"
+      ? projectData
+      : projectData.filter((project) => project.tags.includes(selectedTag));
 
-  // 선택된 필터에 따라 프로젝트 데이터 필터링
-  const filteredProjects = filterProjects(projectData, selectedTag);
-
+  //
   return (
     <div className="w-full h-full p-4 overflow-auto">
       <h2 className="text-xl font-bold mb-4">
@@ -19,12 +22,12 @@ export default function ProjectPage() {
       <div className="space-y-6">
         {filteredProjects.map((project, index) => (
           <div key={index} className="border rounded-lg p-4 bg-white shadow-sm">
-            <h3 className="text-lg font-semibold mb-2">{project.title}</h3>
-            <div className="text-sm text-gray-600 mb-2">
-              <span className="mr-4">{project.where}</span>
-              <span>{project.when}</span>
+            <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+            <div className="text-sm mb-2">
+              <span className="text-navy mr-4">{project.where}</span>
+              <span className="text-gray-400">{project.when}</span>
             </div>
-            <p className="text-gray-700 mb-3">{project.sub}</p>
+            <p className="text-gray-700 font-semibold mb-3">{project.sub}</p>
 
             {/* 설명 리스트 */}
             <ul className="text-sm text-gray-600 space-y-1 mb-3">
@@ -33,20 +36,18 @@ export default function ProjectPage() {
               ))}
             </ul>
 
-            {/* 사이트 링크들 - ScSelect로 변경 */}
+            {/* 사이트 링크들 */}
             {project.site.selectOptions.length > 0 && (
               <div className="mt-3">
                 <ScSelect
                   options={project.site.selectOptions.map(
-                    (option): SelectOption => ({
+                    (option): TSelectOption => ({
                       label: option.name,
                       value: option.url,
                     })
                   )}
-                  placeholder="사이트 선택"
-                  onChange={(url) =>
-                    window.open(url, "_blank", "noopener,noreferrer")
-                  }
+                  placeholder="관련 사이트"
+                  onChange={(url) => openUrl(url)}
                   className="w-full max-w-xs"
                 />
               </div>
