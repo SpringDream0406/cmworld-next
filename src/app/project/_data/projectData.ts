@@ -118,7 +118,7 @@ export const projectData: IProjectData[] = [
   {
     title: "CMWorld",
     where: "개인 프로젝트",
-    when: "2024.03 ~ 진행 중 (Beta 완성 - 약 2주)",
+    when: "2024.03 ~ 2024.12 (Beta 완성 - 약 2주)",
     sub: "싸이월드를 모티브로 포트폴리오 사이트 제작",
     exp: [
       "이전에 만들어본 포트폴리오의 결과가 만족스럽지 않아 저의 취향을 반영한 포트폴리오를 다시 만들게 되었습니다.",
@@ -128,6 +128,7 @@ export const projectData: IProjectData[] = [
       "고정 페이지는 정적 Router로, 늘어나는 Component는 동적 Router로 처리했습니다.",
       "~~AWS의 S3와 CloudFront를 이용하여 배포하고, Route53를 사용하여 도메인을 호스팅했습니다.~~",
       "고정 지출을 줄이고 간편한 CI/CD를 사용하고자, 배포와 호스팅을 AWS에서 Netlify로 변경했습니다.",
+      "CRA의 유지보수 중단으로 인해 Next.js로 마이그레이션하여 CMWorld-Next 프로젝트로 전환했습니다.",
     ],
     site: {
       selectOptions: [

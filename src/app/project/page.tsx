@@ -27,6 +27,7 @@ export default function ProjectPage() {
               <span className="text-navy mr-4">{project.where}</span>
               <span className="text-gray-400">{project.when}</span>
             </div>
+            <div className="w-full h-px bg-gray-200 my-2"></div>
             <p className="text-gray-700 font-semibold mb-3">{project.sub}</p>
 
             {/* 설명 리스트 */}
