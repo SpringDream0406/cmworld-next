@@ -23,6 +23,7 @@ export const useNoticeStore = create(
 
       initFromUrl: () => {
         const id = getUrlParam("notice", 0);
+
         if (id !== 0) {
           const notice = noticeList.find((notice) => notice.id === id);
 
