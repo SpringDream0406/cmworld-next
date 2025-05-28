@@ -20,7 +20,7 @@ interface NavigationProps {
   className?: string;
 }
 
-const Navigation = ({ className = "" }: NavigationProps) => {
+export const Navigation = ({ className = "" }: NavigationProps) => {
   const pathname = usePathname();
 
   // 네비게이션 항목 렌더링
@@ -45,5 +45,3 @@ const Navigation = ({ className = "" }: NavigationProps) => {
     <nav className={`flex flex-col gap-0.5 ${className}`}>{navigationBars}</nav>
   );
 };
-
-export default Navigation;

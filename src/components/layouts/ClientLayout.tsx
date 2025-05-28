@@ -1,6 +1,6 @@
 "use client";
 
-import Navigation from "@/components/common/Navigation";
+import { Navigation } from "@/components/common";
 import MusicPlayer from "@/components/musicPlayer/MusicPlayer";
 
 export const ClientLayout = ({ children }: { children: React.ReactNode }) => {

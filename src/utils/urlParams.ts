@@ -1,4 +1,4 @@
-/** URL 파라미터를 업데이트하는 함수 */
+/** URL 파라미터를 업데이트하는 함수 (히스토리 없이) */
 export const updateUrlParam = (paramName: string, value: string | number) => {
   if (typeof window === "undefined") return;
 
@@ -7,11 +7,11 @@ export const updateUrlParam = (paramName: string, value: string | number) => {
   // 값 설정
   searchParams.set(paramName, String(value));
 
-  // URL 업데이트
+  // URL 업데이트 (replaceState 사용 - 히스토리에 추가 안함)
   const newUrl = `${window.location.pathname}${
     searchParams.toString() ? `?${searchParams.toString()}` : ""
   }`;
-  window.history.pushState({ path: newUrl }, "", newUrl);
+  window.history.replaceState(null, "", newUrl);
 };
 
 /** URL에서 파라미터 값을 가져오는 함수 */

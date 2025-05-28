@@ -11,28 +11,24 @@ export const useNoticeStore = create(
     },
     (set) => ({
       setNotice: (id: number) => {
-        const notice =
-          noticeList.find((notice) => notice.id === id) || noticeList[0];
+        const notice = noticeList.find((notice) => notice.id === id);
 
         set({
           noticeId: id,
-          selectedContent: notice.content,
+          selectedContent: notice ? notice.content : null,
         });
 
-        // URL 업데이트
         updateUrlParam("notice", id);
       },
 
-      // URL에서 상태 초기화
       initFromUrl: () => {
         const id = getUrlParam("notice", 0);
         if (id !== 0) {
-          const notice =
-            noticeList.find((notice) => notice.id === id) || noticeList[0];
+          const notice = noticeList.find((notice) => notice.id === id);
 
           set({
             noticeId: id,
-            selectedContent: notice.content,
+            selectedContent: notice ? notice.content : null,
           });
         }
       },

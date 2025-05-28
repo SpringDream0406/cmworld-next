@@ -39,7 +39,7 @@ export const HomeTop = () => {
         </div>
         <div className="w-[5%]"></div>
 
-        {/* 게시물 */}
+        {/* 게시물 숫자 */}
         <div className="w-[35%]">{}</div>
       </div>
     </div>
