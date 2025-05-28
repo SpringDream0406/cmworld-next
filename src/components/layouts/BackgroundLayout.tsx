@@ -1,6 +1,6 @@
 "use client";
 
-import { useSettingStore } from "@/store/settingStore";
+import { useSettingStore } from "@/store";
 import { ReactNode } from "react";
 
 export const BackgroundLayout = ({ children }: { children: ReactNode }) => {

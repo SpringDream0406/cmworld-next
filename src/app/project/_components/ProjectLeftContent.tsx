@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useProjectStore } from "@/store/projectStore";
-import { projectTags } from "@/app/project/_data/projectData";
+import { useProjectStore } from "@/store";
+import { projectTags } from "@/app/project/_data";
 import { Button } from "@/components/ui/button";
 
 export const ProjectLeftContent = () => {

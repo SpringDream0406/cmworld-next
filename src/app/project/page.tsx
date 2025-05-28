@@ -1,7 +1,7 @@
 "use client";
 
-import { useProjectStore } from "@/store/projectStore";
-import { projectData } from "@/app/project/_data/projectData";
+import { useProjectStore } from "@/store";
+import { projectData } from "@/app/project/_data";
 import { ScSelect, TSelectOption } from "@/components/shadcn/ScSelect";
 import { openUrl } from "@/utils";
 

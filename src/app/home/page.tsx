@@ -2,7 +2,7 @@
 
 import React from "react";
 import { HomeTop } from "./_components";
-import { useNoticeStore } from "@/store/noticeStore";
+import { useNoticeStore } from "@/store";
 import { NotFound } from "@/components/common";
 
 export default function HomePage() {

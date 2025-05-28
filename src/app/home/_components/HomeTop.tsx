@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { noticeList } from "../_data";
-import { useNoticeStore } from "@/store/noticeStore";
+import { useNoticeStore } from "@/store";
 
 export const HomeTop = () => {
   const { noticeId, setNotice, initFromUrl } = useNoticeStore();
