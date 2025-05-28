@@ -1,14 +1,16 @@
 "use client";
 
+import { useEffect } from "react";
 import { noticeList } from "../_data";
+import { useNoticeStore } from "@/store/noticeStore";
 
-interface HomeTopProps {
-  noticeId: number;
-  setNotice: (id: number) => void;
-}
+export const HomeTop = () => {
+  const { noticeId, setNotice, initFromUrl } = useNoticeStore();
 
-export const HomeTop = ({ noticeId, setNotice }: HomeTopProps) => {
-  // 커스텀 훅에서 noticeId와 setNotice 가져오기
+  // 컴포넌트 마운트 시 URL에서 상태 초기화
+  useEffect(() => {
+    initFromUrl();
+  }, [initFromUrl]);
 
   return (
     <div className="h-full">
