@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { noticeList } from "../_data";
-import { useNoticeStore } from "@/store";
+import { useNoticeStore } from "@/store/noticeStore";
 
 export const HomeTop = () => {
   const { noticeId, setNotice, initFromUrl } = useNoticeStore();
@@ -18,27 +18,24 @@ export const HomeTop = () => {
       <div className="h-[85%] flex flex-row">
         {/* 공지사항 */}
         <div className="w-[60%] h-full common-border">
-          {noticeList
-            .slice()
-            .reverse()
-            .map((notice, index) => (
+          {noticeList.map((notice, index) => (
+            <div
+              key={index}
+              className="w-full h-[15%] flex justify-between p-3 cursor-pointer hover:underline"
+              onClick={() => setNotice(notice.id)}
+            >
               <div
-                key={index}
-                className="w-full h-[15%] flex justify-between p-3 cursor-pointer hover:underline"
-                onClick={() => setNotice(notice.id)}
+                className={`w-[70%] ${
+                  noticeId === notice.id ? "text-basic" : ""
+                }`}
               >
-                <div
-                  className={`w-[70%] ${
-                    noticeId === notice.id ? "text-basic" : ""
-                  }`}
-                >
-                  {notice.title}
-                </div>
-                <div className="w-[30%] text-right text-gray-500">
-                  {notice.lastUpdate}
-                </div>
+                {notice.title}
               </div>
-            ))}
+              <div className="w-[30%] text-right text-gray-500">
+                {notice.lastUpdate}
+              </div>
+            </div>
+          ))}
         </div>
         <div className="w-[5%]"></div>
 
