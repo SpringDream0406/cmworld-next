@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import { combine } from "zustand/middleware";
-import { updateUrlParam, getUrlParam } from "@/utils/urlParams";
+import { updateUrlParam, getUrlParam } from "@/utils";
+import { projectTags } from "@/app/project/_data";
 
-// 태그 타입 정의
-type TagType = "Total" | "Team" | "Personal" | "2025" | "2024" | "2023";
+// projectTags 값들의 타입을 추출
+type TagType = (typeof projectTags)[keyof typeof projectTags];
 
 // 프로젝트 store
 export const useProjectStore = create(
@@ -20,7 +21,7 @@ export const useProjectStore = create(
 
       // URL에서 초기 필터 값 읽기
       initFromUrl: () => {
-        const tag = getUrlParam("tag", "Total");
+        const tag = getUrlParam("tag", "Total") as TagType;
         if (tag !== "Total") {
           set({ selectedTag: tag });
         }
