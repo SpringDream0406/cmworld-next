@@ -101,7 +101,7 @@ export const projectData: IProjectData[] = [
         },
         {
           name: "데모 사이트",
-          url: "http://farmfarm-front.s3-website.ap-northeast-2.amazonaws.com/",
+          url: "https://farmfarm.springdream.kr/",
         },
         {
           name: "ERD (Nest.js)",
