@@ -101,7 +101,7 @@ export const profileData: ProfileSection[] = [
     items: [
       {
         title: "광주 인공지능사관학교",
-        description: "4기 / App반",
+        description: "4기",
         period: "2023.03 ~ 2023.12",
       },
       {

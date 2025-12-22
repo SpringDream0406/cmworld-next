@@ -32,10 +32,14 @@ export const projectData: IProjectData[] = [
     when: "2025.01 ~ 진행 중",
     sub: "체험학습 연계 앱",
     exp: [
-      "체험학습 연계 앱의 백앤드를 맡아, 서버, DB, 배포를 담당해서 개발 중입니다.",
+      "체험학습 연계 앱의 백앤드를 맡아, 호스트 페이지, 서버, DB, 배포를 담당해서 개발 중입니다.",
     ],
     site: {
       selectOptions: [
+        {
+          name: "고잉투게더 호스트 페이지",
+          url: "https://host.going-together.co.kr",
+        },
         {
           name: "개발일지 (tistory)",
           url: "https://springdream0406.tistory.com/category/Projects/GoingTogether",
@@ -58,18 +62,10 @@ export const projectData: IProjectData[] = [
     ],
     site: {
       selectOptions: [
-        {
-          name: "사이트",
-          url: "https://front.cmspp.kr/",
-        },
-        {
-          name: "Github [Back]",
-          url: "https://github.com/SpringDream0406/CMSPP.Back",
-        },
-        {
-          name: "Github [Front]",
-          url: "https://github.com/SpringDream0406/CMSPP.Front",
-        },
+        // {
+        //   name: "사이트",
+        //   url: "https://front.cmspp.kr/",
+        // },
         {
           name: "개발일지 (tistory)",
           url: "https://springdream0406.tistory.com/category/Projects/CMSPP%28CM%20Solar%20Power%20Plant%29",
@@ -128,7 +124,6 @@ export const projectData: IProjectData[] = [
       "고정 페이지는 정적 Router로, 늘어나는 Component는 동적 Router로 처리했습니다.",
       "~~AWS의 S3와 CloudFront를 이용하여 배포하고, Route53를 사용하여 도메인을 호스팅했습니다.~~",
       "고정 지출을 줄이고 간편한 CI/CD를 사용하고자, 배포와 호스팅을 AWS에서 Netlify로 변경했습니다.",
-      "CRA의 유지보수 중단으로 인해 Next.js로 마이그레이션하여 CMWorld-Next 프로젝트로 전환했습니다.",
     ],
     site: {
       selectOptions: [

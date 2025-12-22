@@ -9,7 +9,7 @@ const tags = {
   home: "홈",
   profile: "프로필",
   project: "프로젝트",
-  jukbox: "쥬크박스",
+  jukebox: "쥬크박스",
   playground: "놀이터",
   // photo: "사진첩", // 주석 처리된 항목
   guestbook: "방명록",

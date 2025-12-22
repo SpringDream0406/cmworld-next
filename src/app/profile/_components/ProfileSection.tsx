@@ -29,16 +29,16 @@ export const IconItem = ({ item }: { item: TProfileItem }) => {
 export const TextItem = ({ item }: { item: TProfileItem }) => {
   return (
     <div className="flex flex-col items-center h-26 m-2 rounded-2xl font-medium">
-      <div className="h-3/5 text-2xl text-navy flex items-center text-center">
+      <div className="h-3/7 text-2xl text-navy flex items-center text-center">
         {item.title}
       </div>
       {item.description && (
-        <div className="h-1/4 flex items-center text-center">
+        <div className="h-2/7 flex items-center text-center">
           {item.description}
         </div>
       )}
       {item.period && (
-        <div className="h-1/6 text-xs text-gray-500 flex items-center text-center">
+        <div className="h-2/7 text-xs text-gray-500 flex items-center text-center">
           {item.period}
         </div>
       )}
