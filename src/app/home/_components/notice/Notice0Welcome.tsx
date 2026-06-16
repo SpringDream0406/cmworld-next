@@ -28,7 +28,7 @@ export const Notice0Welcome = () => {
       </p>
       <p>
         둘러보시기 전에{" "}
-        <Link href="/jukbox" className="text-basic hover:underline">
+        <Link href="/jukebox" className="text-basic hover:underline">
           쥬크박스
         </Link>
         에 방문하여 배경노래를 먼저 세팅해보세요.

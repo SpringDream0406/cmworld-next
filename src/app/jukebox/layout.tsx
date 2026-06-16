@@ -1,5 +1,5 @@
 import { ContentLayout } from "@/components/layouts";
-import { ProjectLeftContent } from "./_components";
+import { JukeboxLeftContent } from "./_components";
 
 export default function JukeboxLayout({
   children,
@@ -7,7 +7,7 @@ export default function JukeboxLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ContentLayout leftContent={<ProjectLeftContent />}>
+    <ContentLayout leftContent={<JukeboxLeftContent />}>
       {children}
     </ContentLayout>
   );

@@ -137,3 +137,170 @@
 .common-border2 {
   @apply border-2 border-black rounded-xl;
 }
+
+/* 흐르는 텍스트 (뮤직 플레이어 곡 정보) */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 15s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ======== 사이드 플레이어 ======== */
+.sideMusic-songinfo {
+  width: 100%;
+  height: 35%;
+}
+.flow-text {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: 0.3s;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.flow-text:hover {
+  color: #9d9993;
+}
+.flow-text:hover .flow-wrap {
+  animation-play-state: paused;
+  cursor: pointer;
+}
+.flow-wrap {
+  animation: textLoop 10s linear infinite;
+  padding-right: 1.5rem;
+}
+@keyframes textLoop {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
+}
+
+.sideMusic-mid {
+  height: 35%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.sideMusic-control-btn {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.sideMusic-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.5rem;
+  border: none;
+  background: none;
+  color: black;
+  cursor: pointer;
+}
+.sideMusic-btn:hover {
+  font-size: 2rem;
+  color: black;
+}
+.sideMusic-btn:disabled {
+  color: gray;
+  pointer-events: none;
+}
+.btn-active-side {
+  color: #6e2c17;
+}
+
+.sideMusic-volume {
+  height: 30%;
+  overflow: hidden;
+}
+
+
+/* 풀 플레이어 배경 */
+@keyframes PlayerBackgroundAni {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.player-bg {
+  background: linear-gradient(-45deg, #fff6b7, #f092bc, #8795e6, #c2ffd8);
+  background-size: 400% 400%;
+  animation: PlayerBackgroundAni 15s ease infinite;
+}
+
+/* 풀 플레이어 CM Music 그라디언트 텍스트 */
+.player-cm-music-txt {
+  font-size: 5rem;
+  font-weight: 600;
+  color: transparent;
+  background: linear-gradient(180deg, #d9a7c7 0%, #fffcdc 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  padding: 1rem;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+/* 풀 플레이어 컨트롤 버튼 */
+.player-control-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  width: 6rem;
+  height: 5rem;
+  border: none;
+  background: none;
+  color: rgb(206, 203, 203);
+  cursor: pointer;
+  transition: font-size 0.1s;
+}
+.player-control-btn:hover {
+  font-size: 5rem;
+}
+.player-control-btn:disabled {
+  color: gray;
+  pointer-events: none;
+}
+
+/* 풀 플레이어 흐르는 텍스트 */
+.flow-text-player {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 4rem;
+  font-weight: bold;
+}
+.flow-text-player:hover .flow-wrap-player {
+  animation-play-state: paused;
+  color: pink;
+  cursor: pointer;
+}
+.flow-wrap-player {
+  display: inline-block;
+  animation: textLoop 10s linear infinite;
+}
+

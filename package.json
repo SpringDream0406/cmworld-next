@@ -3,21 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack --port 3010",
+    "dev": "(sleep 2 && open http://localhost:3010) & next dev --turbopack --port 3010",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "@fortawesome/react-fontawesome": "^3.3.1",
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.2.4",
+    "@supabase/supabase-js": "^2.108.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.511.0",
     "next": "16.1.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "react-player": "^2.16.1",
     "tailwind-merge": "^3.4.0",
+    "youtube-video-element": "^1.9.0",
     "zustand": "^5.0.9"
   },
   "devDependencies": {

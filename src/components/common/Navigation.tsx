@@ -13,7 +13,7 @@ const tags = {
   playground: "놀이터",
   // photo: "사진첩", // 주석 처리된 항목
   guestbook: "방명록",
-  // setting: "설정", // 주석 처리된 항목
+  setting: "설정",
 };
 
 interface NavigationProps {

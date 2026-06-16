@@ -9,7 +9,7 @@ import MusicPlayer from "../musicPlayer/MusicPlayer";
 export const LayoutSelector = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
 
-  if (isMobile() || pathname === "/musicplayer") return <MusicPlayer />;
+  if (isMobile() || pathname === "/musicplayer") return <div className="w-screen h-screen"><MusicPlayer /></div>;
 
   return (
     <BackgroundLayout>
