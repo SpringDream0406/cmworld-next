@@ -54,6 +54,7 @@ const MusicPlayer = () => {
   const [shuffledPlaylist, setShuffledPlaylist] = useState<IMusicData[]>([]);
   const [muted, setMuted] = useState(false);
   const [prevVolume, setPrevVolume] = useState(70);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const playerRef = useRef<any>(null);
@@ -119,44 +120,34 @@ const MusicPlayer = () => {
     }
   };
 
-  const hiddenPlayer = (
-    <div
-      style={{
-        position: "absolute",
-        opacity: 0,
-        pointerEvents: "none",
-        width: 1,
-        height: 1,
-        overflow: "hidden",
+  const reactPlayerEl = (controls: boolean) => (
+    <ReactPlayer
+      ref={playerRef}
+      url={currentMusic?.url}
+      playing={isPlaying}
+      loop={realPlaylist.length === 1 || repeat}
+      volume={volume / 100}
+      width="100%"
+      height="100%"
+      controls={controls}
+      onPlay={() => { setIsPlaying(true); setIsLoading(false); }}
+      onPause={() => setIsPlaying(false)}
+      onBuffer={() => setIsLoading(true)}
+      onBufferEnd={() => setIsLoading(false)}
+      onReady={() => {
+        setIsPlayerReady(true);
+        setIsLoading(false);
+        setSongTitle(currentMusic?.title || "");
+        setSongArtist(currentMusic?.artist || "");
+        const dur = playerRef.current?.getDuration?.();
+        if (dur) setDuration(formatTime(dur));
       }}
-    >
-      <ReactPlayer
-        ref={playerRef}
-        url={currentMusic?.url}
-        playing={isPlaying}
-        loop={realPlaylist.length === 1 || repeat}
-        volume={volume / 100}
-        width="1px"
-        height="1px"
-        onPlay={() => { setIsPlaying(true); setIsLoading(false); }}
-        onPause={() => setIsPlaying(false)}
-        onBuffer={() => setIsLoading(true)}
-        onBufferEnd={() => setIsLoading(false)}
-        onReady={() => {
-          setIsPlayerReady(true);
-          setIsLoading(false);
-          setSongTitle(currentMusic?.title || "");
-          setSongArtist(currentMusic?.artist || "");
-          const dur = playerRef.current?.getDuration?.();
-          if (dur) setDuration(formatTime(dur));
-        }}
-        onEnded={() => { changeIndex(1); setIsPlayerReady(false); }}
-        onProgress={({ played, playedSeconds }: { played: number; playedSeconds: number }) => {
-          setPlayed(played);
-          setPlayedSeconds(playedSeconds);
-        }}
-      />
-    </div>
+      onEnded={() => { changeIndex(1); setIsPlayerReady(false); }}
+      onProgress={({ played, playedSeconds }: { played: number; playedSeconds: number }) => {
+        setPlayed(played);
+        setPlayedSeconds(playedSeconds);
+      }}
+    />
   );
 
   // 공통 컨트롤 버튼
@@ -193,7 +184,6 @@ const MusicPlayer = () => {
   if (isPlayer) {
     return (
       <div className="w-full h-full player-bg">
-        {hiddenPlayer}
         <div className="w-full h-full flex flex-col items-center bg-black/50">
           {/* TOP */}
           <div className="h-[10%] w-[90%] flex justify-between items-center">
@@ -230,7 +220,7 @@ const MusicPlayer = () => {
           {/* BODY */}
           <div className="h-[75%] w-[90%] flex flex-col">
             {/* 쇼박스 */}
-            <div className="h-[65%] overflow-hidden">
+            <div className="h-[65%]">
               {showPlaylist && (
                 <div className="h-full overflow-y-auto bg-black/65 rounded">
                   {Object.entries(playlists).map(([key, label]) => (
@@ -258,14 +248,15 @@ const MusicPlayer = () => {
                   ))}
                 </div>
               )}
-              {!showPlaylist && !showPlayingList && (
-                <div className="h-full flex items-center justify-center" />
-              )}
+              {/* YouTube 영상 - 목록 안 띄울 때만 보임, 오디오는 항상 재생 */}
+              <div style={{ height: showPlaylist || showPlayingList ? 0 : "100%", overflow: "hidden" }}>
+                {reactPlayerEl(false)}
+              </div>
             </div>
 
             {/* 곡 정보 */}
             <div className="h-[15%] overflow-hidden flex items-center cursor-pointer" onClick={() => { setShowPlayingList((p) => !p); setShowPlaylist(false); }}>
-              <div className={`flow-text-player ${isPlaying ? "text-white" : "text-white/60"} ${showPlayingList ? "!text-pink-300" : ""}`}>
+              <div className={`flow-text-player ${isPlaying ? "text-white" : "text-white/60 paused"} ${showPlayingList ? "!text-pink-300" : ""}`}>
                 {Array.from({ length: 7 }, (_, i) => (
                   <div key={i} className="flow-wrap-player pr-28">{songInfo}</div>
                 ))}
@@ -306,15 +297,21 @@ const MusicPlayer = () => {
 
   // ====== 사이드 플레이어 모드 ======
   return (
-    <div className="w-full h-full rounded-2xl bg-[whitesmoke] flex flex-col py-2 gap-1 overflow-hidden relative">
-      {hiddenPlayer}
+    <div className="w-full rounded-2xl bg-[whitesmoke] flex flex-col py-2 gap-1 relative" style={{ minHeight: "100%" }}>
+      {/* YouTube 오디오 플레이어 - 영상 닫혀있을 때 숨김 */}
+      <div style={isVideoOpen
+        ? { display: "none" }
+        : { position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none", overflow: "hidden" }
+      }>
+        {reactPlayerEl(false)}
+      </div>
 
-      {/* 흐르는 곡 정보 */}
+      {/* 흐르는 곡 정보 - 클릭 시 YouTube 영상 토글 */}
       <div
         className="flex-[3] flex items-center overflow-hidden cursor-pointer"
-        onClick={() => { setShowPlayingList((p) => !p); setShowPlaylist(false); }}
+        onClick={() => setIsVideoOpen((p) => !p)}
       >
-        <div className="flow-text">
+        <div className={`flow-text ${!isPlaying ? "paused" : ""}`}>
           {Array.from({ length: 7 }, (_, i) => (
             <div key={i} className="flow-wrap">{songInfo}</div>
           ))}
@@ -366,6 +363,13 @@ const MusicPlayer = () => {
         />
         <span className="text-xs text-gray-600 w-7 text-right shrink-0 tabular-nums">{muted ? 0 : volume}</span>
       </div>
+
+      {/* YouTube 영상 - 곡 정보 클릭 시 토글 */}
+      {isVideoOpen && (
+        <div className="w-full mt-1" style={{ aspectRatio: "16/9" }}>
+          {reactPlayerEl(true)}
+        </div>
+      )}
     </div>
   );
 };

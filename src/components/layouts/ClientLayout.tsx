@@ -27,7 +27,7 @@ export const ClientLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="w-[20%] flex flex-col items-center pt-4">
         {/* 뮤직플레이어 카드 */}
         <div
-          className="w-[70%] rounded-2xl bg-white/90 p-2"
+          className="w-[70%] rounded-2xl bg-[whitesmoke] px-2 py-1"
           style={{
             boxShadow:
               "rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset",
