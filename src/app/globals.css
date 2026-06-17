@@ -255,6 +255,10 @@
 
 /* 풀 플레이어 CM Music 그라디언트 텍스트 */
 .player-cm-music-txt {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 5rem;
   font-weight: 600;
   color: transparent;
@@ -268,7 +272,28 @@
   outline: none;
 }
 
-/* 풀 플레이어 컨트롤 버튼 */
+/* 풀 플레이어 컨트롤 버튼 (모바일) */
+.player-control-btn-mobile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  background: none;
+  color: rgb(206, 203, 203);
+  cursor: pointer;
+}
+.player-control-btn-mobile:hover {
+  font-size: 2.5rem;
+}
+.player-control-btn-mobile:disabled {
+  color: gray;
+  pointer-events: none;
+}
+
+/* 풀 플레이어 컨트롤 버튼 (데스크탑) */
 .player-control-btn {
   display: flex;
   justify-content: center;
@@ -290,6 +315,102 @@
   pointer-events: none;
 }
 
+/* 풀 플레이어 모바일 곡 정보 (정적) */
+.song-info-mobile {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.song-info-mobile .song-title {
+  height: 60%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+}
+.song-info-mobile .song-artist {
+  height: 40%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-size: 0.8rem;
+  color: rgb(200, 200, 200);
+}
+
+/* 풀 플레이어 컨트롤 바 */
+.player-play-bar {
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.player-time {
+  display: flex;
+  justify-content: center;
+  width: 15%;
+  color: white;
+  font-size: 1rem;
+}
+.player-range {
+  width: 70%;
+  accent-color: white;
+}
+.player-play-btns {
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.player-play-btns button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  background: none;
+  color: rgb(206, 203, 203);
+  cursor: pointer;
+}
+.player-play-btns button:hover { font-size: 2.5rem; }
+.player-play-btns button:disabled {
+  color: gray;
+  pointer-events: none;
+}
+.player-play-btns .btn-active-player { color: pink; }
+
+/* 풀 플레이어 모바일/데스크탑 전환 */
+.player-mobile-only { display: flex; }
+.player-desktop-only { display: none; }
+
+@media (min-width: 481px) {
+  .player-mobile-only { display: none; }
+  .player-desktop-only { display: flex; }
+}
+
+/* 풀 플레이어 볼륨바 - 모바일에서 숨김 */
+.player-volume-bar {
+  display: none;
+  width: 80%;
+  margin-top: 2rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@media (min-width: 481px) {
+  .player-volume-bar { display: flex; }
+  .player-play-btns button { font-size: 4rem; width: 6rem; height: 5rem; }
+  .player-play-btns button:hover { font-size: 5rem; }
+}
+
 /* 풀 플레이어 흐르는 텍스트 */
 .flow-text-player {
   display: flex;
@@ -308,8 +429,44 @@
 .flow-wrap-player {
   display: inline-block;
   animation: textLoop 10s linear infinite;
+  padding-right: 7rem;
 }
 .flow-text-player.paused .flow-wrap-player {
   animation-play-state: paused;
+}
+
+/* 풀 플레이어 상단/목록 아이콘 */
+.player-top-icon {
+  width: 48px;
+  height: 48px;
+}
+.player-playlist-icon {
+  width: 48px;
+  height: 48px;
+}
+
+/* 풀 플레이어 목록 글자 크기 */
+.player-list-label {
+  font-size: 1.5rem;
+}
+.player-list-title {
+  font-size: 1.25rem;
+}
+.player-list-artist {
+  font-size: 0.875rem;
+}
+
+/* 모바일 미디어 쿼리 (480px 이하) */
+@media (max-width: 480px) {
+  .player-cm-music-txt { font-size: 2rem; padding: 0.5rem; }
+  .player-control-btn { font-size: 2rem; width: 3rem; height: 3rem; }
+  .player-control-btn:hover { font-size: 2.5rem; }
+  .flow-text-player { font-size: 2rem; }
+  .flow-wrap-player { padding-right: 3rem; }
+  .player-top-icon { width: 28px; height: 28px; }
+  .player-playlist-icon { width: 28px; height: 28px; }
+  .player-list-label { font-size: 1.125rem; }
+  .player-list-title { font-size: 0.875rem; }
+  .player-list-artist { font-size: 0.75rem; }
 }
 

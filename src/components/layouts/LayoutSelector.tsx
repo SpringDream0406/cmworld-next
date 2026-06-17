@@ -1,15 +1,20 @@
 "use client";
 import { isMobile } from "@/utils";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { BackgroundLayout } from "./BackgroundLayout";
 import { ClientLayout } from "./ClientLayout";
 import MusicPlayer from "../musicPlayer/MusicPlayer";
 
 export const LayoutSelector = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
+  const [isMobileView, setIsMobileView] = useState(false);
 
-  if (isMobile() || pathname === "/musicplayer") return <div className="w-screen h-screen"><MusicPlayer /></div>;
+  useEffect(() => {
+    setIsMobileView(isMobile());
+  }, []);
+
+  if (isMobileView || pathname === "/musicplayer") return <div className="w-screen h-dvh overflow-hidden"><MusicPlayer /></div>;
 
   return (
     <BackgroundLayout>

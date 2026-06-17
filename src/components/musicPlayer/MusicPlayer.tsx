@@ -33,7 +33,9 @@ const shuffleArray = <T,>(arr: T[]): T[] =>
 
 const MusicPlayer = () => {
   const pathname = usePathname();
-  const isPlayer = isMobile() || pathname === "/musicplayer";
+  const [isMobileView, setIsMobileView] = useState(false);
+  useEffect(() => { setIsMobileView(isMobile()); }, []);
+  const isPlayer = isMobileView || pathname === "/musicplayer";
 
   const { playMusics, playlistCategory, volume, setVolume, selectPlaylist, initSongs } =
     useMusicStore();
@@ -152,29 +154,46 @@ const MusicPlayer = () => {
 
   // 공통 컨트롤 버튼
   const controlButtons = (isLarge: boolean) => {
-    const btnCls = isLarge
-      ? "player-control-btn"
-      : "sideMusic-btn";
-    const activeCls = isLarge ? "!text-pink-300" : "btn-active-side";
-    const iconSz = isLarge ? "4rem" : "1.5rem";
-    const playIconSz = isLarge ? "4rem" : "1.5rem";
-
+    if (isLarge) {
+      // 풀 플레이어 버튼 (원본 .play-btns-p 구조)
+      const activeCls = "btn-active-player";
+      return (
+        <div className="player-play-btns">
+          <button onClick={() => changeIndex(-1)} disabled={!isPlayerReady || isEmpty}>
+            <FontAwesomeIcon icon={faBackwardStep} style={{ fontSize: "1em" }} />
+          </button>
+          <button onClick={() => setIsPlaying(false)} disabled={isEmpty} className={!isPlaying ? activeCls : ""}>
+            <FontAwesomeIcon icon={faPause} style={{ fontSize: "1em" }} />
+          </button>
+          <button onClick={() => setIsPlaying(true)} disabled={isEmpty} className={isPlaying && !isLoading ? activeCls : ""}>
+            <FontAwesomeIcon icon={isLoading ? faSpinner : faPlay} spin={isLoading} style={{ fontSize: "1em" }} />
+          </button>
+          <button onClick={() => changeIndex(1)} disabled={!isPlayerReady || isEmpty}>
+            <FontAwesomeIcon icon={faForwardStep} style={{ fontSize: "1em" }} />
+          </button>
+          <button onClick={() => setIsShuffleOn((p) => !p)} className={isShuffleOn ? activeCls : ""}>
+            <FontAwesomeIcon icon={faShuffle} style={{ fontSize: "1em" }} />
+          </button>
+        </div>
+      );
+    }
+    // 사이드 플레이어 버튼
     return (
-      <div className={`flex items-center ${isLarge ? "justify-center gap-2" : "justify-around w-full h-full"}`}>
-        <button onClick={() => changeIndex(-1)} disabled={!isPlayerReady || isEmpty} className={btnCls}>
-          <FontAwesomeIcon icon={faBackwardStep} style={{ fontSize: iconSz }} />
+      <div className="flex justify-around w-full h-full">
+        <button onClick={() => changeIndex(-1)} disabled={!isPlayerReady || isEmpty} className="sideMusic-btn">
+          <FontAwesomeIcon icon={faBackwardStep} style={{ fontSize: "1.5rem" }} />
         </button>
-        <button onClick={() => setIsPlaying(false)} disabled={isEmpty} className={`${btnCls} ${!isPlaying ? activeCls : ""}`}>
-          <FontAwesomeIcon icon={faPause} style={{ fontSize: iconSz }} />
+        <button onClick={() => setIsPlaying(false)} disabled={isEmpty} className={`sideMusic-btn ${!isPlaying ? "btn-active-side" : ""}`}>
+          <FontAwesomeIcon icon={faPause} style={{ fontSize: "1.5rem" }} />
         </button>
-        <button onClick={() => setIsPlaying(true)} disabled={isEmpty} className={`${btnCls} ${isPlaying && !isLoading ? activeCls : ""}`}>
-          <FontAwesomeIcon icon={isLoading ? faSpinner : faPlay} spin={isLoading} style={{ fontSize: playIconSz }} />
+        <button onClick={() => setIsPlaying(true)} disabled={isEmpty} className={`sideMusic-btn ${isPlaying && !isLoading ? "btn-active-side" : ""}`}>
+          <FontAwesomeIcon icon={isLoading ? faSpinner : faPlay} spin={isLoading} style={{ fontSize: "1.5rem" }} />
         </button>
-        <button onClick={() => changeIndex(1)} disabled={!isPlayerReady || isEmpty} className={btnCls}>
-          <FontAwesomeIcon icon={faForwardStep} style={{ fontSize: iconSz }} />
+        <button onClick={() => changeIndex(1)} disabled={!isPlayerReady || isEmpty} className="sideMusic-btn">
+          <FontAwesomeIcon icon={faForwardStep} style={{ fontSize: "1.5rem" }} />
         </button>
-        <button onClick={() => setIsShuffleOn((p) => !p)} className={`${btnCls} ${isShuffleOn ? activeCls : ""}`}>
-          <FontAwesomeIcon icon={faShuffle} style={{ fontSize: iconSz }} />
+        <button onClick={() => setIsShuffleOn((p) => !p)} className={`sideMusic-btn ${isShuffleOn ? "btn-active-side" : ""}`}>
+          <FontAwesomeIcon icon={faShuffle} style={{ fontSize: "1.5rem" }} />
         </button>
       </div>
     );
@@ -184,37 +203,46 @@ const MusicPlayer = () => {
   if (isPlayer) {
     return (
       <div className="w-full h-full player-bg">
-        <div className="w-full h-full flex flex-col items-center bg-black/50">
+        <div className="w-full h-full flex flex-col items-center bg-black/50 overflow-hidden">
           {/* TOP */}
-          <div className="h-[10%] w-[90%] flex justify-between items-center">
-            <button
-              onClick={() => setRepeat((p) => !p)}
-              className="border-none bg-transparent outline-none cursor-pointer"
-              style={{ color: repeat ? "pink" : "rgba(255,255,255,0.6)" }}
-            >
-              <Repeat1 size={48} />
-            </button>
-            <button
-              onClick={() => { setShowPlaylist((p) => !p); setShowPlayingList(false); }}
-              className="player-cm-music-txt"
-            >
-              {playlistCategory
-                ? playlists[playlistCategory as keyof typeof playlists]
-                : "CM Music"}
-            </button>
-            <button
-              onClick={() => { setShowPlayingList((p) => !p); setShowPlaylist(false); }}
-              className="border-none bg-transparent outline-none cursor-pointer"
-              style={{ color: showPlayingList ? "pink" : "rgba(255,255,255,0.6)" }}
-            >
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="3" y="5" width="14" height="2" rx="1" />
-                <rect x="3" y="10" width="10" height="2" rx="1" />
-                <rect x="3" y="15" width="12" height="2" rx="1" />
-                <circle cx="19" cy="14" r="3" />
-                <path d="M19 8v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </button>
+          <div className="h-[10%] w-[90%] flex justify-between">
+            {/* 반복 */}
+            <div className="w-[10%] flex items-center">
+              <button
+                onClick={() => setRepeat((p) => !p)}
+                className="border-none bg-transparent outline-none cursor-pointer"
+                style={{ color: repeat ? "pink" : "rgba(255,255,255,0.6)" }}
+              >
+                <Repeat1 className="player-top-icon" />
+              </button>
+            </div>
+            {/* CM Music */}
+            <div className="w-[60%] flex">
+              <button
+                onClick={() => { setShowPlaylist((p) => !p); setShowPlayingList(false); }}
+                className="player-cm-music-txt"
+              >
+                {playlistCategory
+                  ? playlists[playlistCategory as keyof typeof playlists]
+                  : "CM Music"}
+              </button>
+            </div>
+            {/* 플레잉 리스트 아이콘 */}
+            <div className="w-[10%] flex justify-end items-center">
+              <button
+                onClick={() => { setShowPlayingList((p) => !p); setShowPlaylist(false); }}
+                className="border-none bg-transparent outline-none cursor-pointer"
+                style={{ color: showPlayingList ? "pink" : "rgba(255,255,255,0.6)" }}
+              >
+                <svg className="player-playlist-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="3" y="5" width="14" height="2" rx="1" />
+                  <rect x="3" y="10" width="10" height="2" rx="1" />
+                  <rect x="3" y="15" width="12" height="2" rx="1" />
+                  <circle cx="19" cy="14" r="3" />
+                  <path d="M19 8v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </button>
+            </div>
           </div>
 
           {/* BODY */}
@@ -227,7 +255,7 @@ const MusicPlayer = () => {
                     <button
                       key={key}
                       onClick={() => { selectPlaylist(key); setShowPlaylist(false); }}
-                      className={`w-full text-center py-3 text-2xl text-white hover:bg-white/10 transition-colors border-none bg-transparent cursor-pointer ${playlistCategory === key ? "text-pink-300" : ""}`}
+                      className={`w-full text-center py-3 player-list-label text-white hover:bg-white/10 transition-colors border-none bg-transparent cursor-pointer ${playlistCategory === key ? "text-pink-300" : ""}`}
                     >
                       {label}
                     </button>
@@ -242,8 +270,8 @@ const MusicPlayer = () => {
                       onClick={() => { setCurrentIndex(index); setIsPlaying(true); setShowPlayingList(false); }}
                       className="w-full text-center py-3 hover:bg-white/10 transition-colors border-none bg-transparent cursor-pointer"
                     >
-                      <div className={`text-xl font-medium ${currentIndex === index ? "text-pink-300" : "text-white"}`}>{music.title}</div>
-                      <div className="text-sm text-white/60">{music.artist}</div>
+                      <div className={`player-list-title font-medium ${currentIndex === index ? "text-pink-300" : "text-white"}`}>{music.title}</div>
+                      <div className="player-list-artist text-white/60">{music.artist}</div>
                     </button>
                   ))}
                 </div>
@@ -255,32 +283,42 @@ const MusicPlayer = () => {
             </div>
 
             {/* 곡 정보 */}
-            <div className="h-[15%] overflow-hidden flex items-center cursor-pointer" onClick={() => { setShowPlayingList((p) => !p); setShowPlaylist(false); }}>
-              <div className={`flow-text-player ${isPlaying ? "text-white" : "text-white/60 paused"} ${showPlayingList ? "!text-pink-300" : ""}`}>
+            <div className="h-[15%] overflow-hidden cursor-pointer" onClick={() => { setShowPlayingList((p) => !p); setShowPlaylist(false); }}>
+              {/* 모바일: 정적 타이틀/아티스트 */}
+              <div className="song-info-mobile player-mobile-only">
+                <div className="song-title" style={showPlayingList ? { color: "pink" } : {}}>
+                  {songTitle}
+                </div>
+                <div className="song-artist" style={showPlayingList ? { color: "pink" } : {}}>
+                  {songArtist}
+                </div>
+              </div>
+              {/* 데스크탑: 흐르는 텍스트 */}
+              <div className={`flow-text-player player-desktop-only h-full ${isPlaying ? "text-white" : "text-white/60 paused"} ${showPlayingList ? "!text-pink-300" : ""}`}>
                 {Array.from({ length: 7 }, (_, i) => (
-                  <div key={i} className="flow-wrap-player pr-28">{songInfo}</div>
+                  <div key={i} className="flow-wrap-player">{songInfo}</div>
                 ))}
               </div>
             </div>
 
             {/* 컨트롤 */}
-            <div className="h-[20%] flex flex-col justify-center gap-2">
-              <div className="flex items-center gap-3">
-                <span className="text-white text-sm w-12 text-right">{formatTime(playedSeconds)}</span>
+            <div className="h-[20%] flex flex-col">
+              <div className="player-play-bar">
+                <span className="player-time">{formatTime(playedSeconds)}</span>
                 <input
                   type="range" min={0} max={1} step={0.001} value={played}
                   onChange={handleSeek} disabled={isEmpty}
-                  className="flex-1 h-1 accent-white disabled:opacity-40 player-bar"
+                  className="player-range h-1 disabled:opacity-40"
                 />
-                <span className="text-white text-sm w-12">{duration}</span>
+                <span className="player-time">{duration}</span>
               </div>
               {controlButtons(true)}
             </div>
           </div>
 
-          {/* 볼륨 */}
-          <div className="w-[80%] mt-4 flex items-center gap-3">
-            <button onClick={handleMuteToggle} className="text-white/80 hover:text-white">
+          {/* 볼륨 - CSS로 모바일(≤480px) 숨김 처리 */}
+          <div className="player-volume-bar">
+            <button onClick={handleMuteToggle} className="text-white/80 hover:text-white shrink-0">
               {muted || volume === 0 ? <VolumeX size={22} /> : <Volume2 size={22} />}
             </button>
             <input
@@ -288,7 +326,7 @@ const MusicPlayer = () => {
               onChange={(e) => { setVolume(Number(e.target.value)); setMuted(false); }}
               className="flex-1 h-1 accent-white"
             />
-            <span className="text-white text-xs w-7 text-right">{muted ? 0 : volume}</span>
+            <span className="text-white text-xs w-7 text-right shrink-0">{muted ? 0 : volume}</span>
           </div>
         </div>
       </div>
