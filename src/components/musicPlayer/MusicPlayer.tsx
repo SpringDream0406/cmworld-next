@@ -350,14 +350,6 @@ const MusicPlayer = () => {
   // ====== 사이드 플레이어 모드 ======
   return (
     <div className="w-full rounded-2xl bg-[whitesmoke] flex flex-col py-2 gap-1 relative" style={{ minHeight: "100%" }}>
-      {/* YouTube 오디오 플레이어 - 영상 닫혀있을 때 숨김 */}
-      <div style={isVideoOpen
-        ? { display: "none" }
-        : { position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none", overflow: "hidden" }
-      }>
-        {reactPlayerEl(false)}
-      </div>
-
       {/* 흐르는 곡 정보 - 클릭 시 YouTube 영상 토글 */}
       <div
         className="flex-[3] flex items-center overflow-hidden cursor-pointer"
@@ -416,12 +408,13 @@ const MusicPlayer = () => {
         <span className="text-xs text-gray-600 w-7 text-right shrink-0 tabular-nums">{muted ? 0 : volume}</span>
       </div>
 
-      {/* YouTube 영상 - 곡 정보 클릭 시 토글 */}
-      {isVideoOpen && (
-        <div className="w-full mt-1" style={{ aspectRatio: "16/9" }}>
-          {reactPlayerEl(true)}
-        </div>
-      )}
+      {/* YouTube 플레이어 - 항상 마운트, 열리면 보이게 / 닫히면 숨김 */}
+      <div style={isVideoOpen
+        ? { width: "100%", aspectRatio: "16/9" }
+        : { position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none", overflow: "hidden" }
+      }>
+        {reactPlayerEl(isVideoOpen)}
+      </div>
     </div>
   );
 };

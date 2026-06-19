@@ -155,7 +155,7 @@ export default function SongsPage() {
     const { data } = await supabase
       .from("songs")
       .select("*")
-      .order("sort_order", { ascending: true });
+      .order("sort_order", { ascending: false });
     if (data) setSongs(data as Song[]);
     setLoading(false);
   };

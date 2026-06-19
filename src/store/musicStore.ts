@@ -20,7 +20,7 @@ export const useMusicStore = create(
             .from("songs")
             .select("url, artist, title, playlists")
             .eq("is_active", true)
-            .order("sort_order", { ascending: true });
+            .order("sort_order", { ascending: false });
           if (!error && data) {
             set({ allSongs: data as IMusicData[] });
           }
@@ -42,7 +42,7 @@ export const useMusicStore = create(
               .from("songs")
               .select("url, artist, title, playlists")
               .eq("is_active", true)
-              .order("sort_order", { ascending: true });
+              .order("sort_order", { ascending: false });
             if (data) {
               all = data as IMusicData[];
               set({ allSongs: all });
