@@ -8,9 +8,14 @@ export default function CmLoginPage() {
   const [error, setError] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
+    const res = await fetch("/api/cm-auth", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+    if (res.ok) {
       sessionStorage.setItem("cm-auth", "true");
       router.push("/cm/songs");
     } else {
