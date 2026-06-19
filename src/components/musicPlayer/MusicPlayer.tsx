@@ -31,17 +31,21 @@ const formatTime = (seconds: number): string => {
 const shuffleArray = <T,>(arr: T[]): T[] =>
   [...arr].sort(() => Math.random() - 0.5);
 
+const ellipsis = (text: string, max: number) =>
+  text.length > max ? text.slice(0, max) + "..." : text;
+
 const MusicPlayer = () => {
   const pathname = usePathname();
   const [isMobileView, setIsMobileView] = useState(false);
   useEffect(() => { setIsMobileView(isMobile()); }, []);
-  const isPlayer = isMobileView || pathname === "/musicplayer";
+  const isPlayer = isMobileView || pathname === "/mp";
 
   const { playMusics, playlistCategory, volume, setVolume, selectPlaylist, initSongs } =
     useMusicStore();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const isFirstLoad = useRef(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isShuffleOn, setIsShuffleOn] = useState(false);
   const [repeat, setRepeat] = useState(false);
@@ -57,6 +61,7 @@ const MusicPlayer = () => {
   const [muted, setMuted] = useState(false);
   const [prevVolume, setPrevVolume] = useState(70);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const playerRef = useRef<any>(null);
@@ -71,18 +76,23 @@ const MusicPlayer = () => {
   const currentMusic = realPlaylist[safeIndex];
   const isEmpty = realPlaylist.length === 0;
 
-  const songInfo = songTitle
-    ? `${songTitle} - ${songArtist}`
-    : isPlayer
-      ? "CM Music을 눌러 플레이리스트를 선택해주세요."
-      : "쥬크박스에서 노래를 선택해주세요";
+  const songInfo = isInitializing || (!songTitle && playMusics.length > 0)
+    ? "로딩 중..."
+    : songTitle
+      ? `${songTitle} - ${songArtist}`
+      : isPlayer
+        ? "CM Music을 눌러 플레이리스트를 선택해주세요."
+        : "쥬크박스에서 노래를 선택해주세요";
 
   useEffect(() => {
     initSongs().then(() => {
       const { playMusics, playlistCategory, selectPlaylist } =
         useMusicStore.getState();
       if (playlistCategory && playMusics.length === 0) {
-        selectPlaylist(playlistCategory);
+        isFirstLoad.current = true;
+        selectPlaylist(playlistCategory).then(() => setIsInitializing(false));
+      } else {
+        setIsInitializing(false);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,7 +101,11 @@ const MusicPlayer = () => {
   useEffect(() => {
     setShuffledPlaylist(shuffleArray(playMusics));
     setCurrentIndex(0);
-    if (playMusics.length > 0) setIsPlaying(true);
+    if (isFirstLoad.current) {
+      isFirstLoad.current = false;
+    } else if (playMusics.length > 0) {
+      setIsPlaying(true);
+    }
   }, [playMusics]);
 
   const changeIndex = (delta: number) => {
@@ -159,7 +173,7 @@ const MusicPlayer = () => {
       const activeCls = "btn-active-player";
       return (
         <div className="player-play-btns">
-          <button onClick={() => changeIndex(-1)} disabled={!isPlayerReady || isEmpty}>
+          <button onClick={() => changeIndex(-1)} disabled={!isPlayerReady || isEmpty || realPlaylist.length <= 1}>
             <FontAwesomeIcon icon={faBackwardStep} style={{ fontSize: "1em" }} />
           </button>
           <button onClick={() => setIsPlaying(false)} disabled={isEmpty} className={!isPlaying ? activeCls : ""}>
@@ -168,7 +182,7 @@ const MusicPlayer = () => {
           <button onClick={() => setIsPlaying(true)} disabled={isEmpty} className={isPlaying && !isLoading ? activeCls : ""}>
             <FontAwesomeIcon icon={isLoading ? faSpinner : faPlay} spin={isLoading} style={{ fontSize: "1em" }} />
           </button>
-          <button onClick={() => changeIndex(1)} disabled={!isPlayerReady || isEmpty}>
+          <button onClick={() => changeIndex(1)} disabled={!isPlayerReady || isEmpty || realPlaylist.length <= 1}>
             <FontAwesomeIcon icon={faForwardStep} style={{ fontSize: "1em" }} />
           </button>
           <button onClick={() => setIsShuffleOn((p) => !p)} className={isShuffleOn ? activeCls : ""}>
@@ -180,20 +194,20 @@ const MusicPlayer = () => {
     // 사이드 플레이어 버튼
     return (
       <div className="flex justify-around w-full h-full">
-        <button onClick={() => changeIndex(-1)} disabled={!isPlayerReady || isEmpty} className="sideMusic-btn">
-          <FontAwesomeIcon icon={faBackwardStep} style={{ fontSize: "1.5rem" }} />
+        <button onClick={() => changeIndex(-1)} disabled={!isPlayerReady || isEmpty || realPlaylist.length <= 1} className="sideMusic-btn">
+          <FontAwesomeIcon icon={faBackwardStep}  />
         </button>
         <button onClick={() => setIsPlaying(false)} disabled={isEmpty} className={`sideMusic-btn ${!isPlaying ? "btn-active-side" : ""}`}>
-          <FontAwesomeIcon icon={faPause} style={{ fontSize: "1.5rem" }} />
+          <FontAwesomeIcon icon={faPause}  />
         </button>
         <button onClick={() => setIsPlaying(true)} disabled={isEmpty} className={`sideMusic-btn ${isPlaying && !isLoading ? "btn-active-side" : ""}`}>
-          <FontAwesomeIcon icon={isLoading ? faSpinner : faPlay} spin={isLoading} style={{ fontSize: "1.5rem" }} />
+          <FontAwesomeIcon icon={isLoading ? faSpinner : faPlay} spin={isLoading}  />
         </button>
-        <button onClick={() => changeIndex(1)} disabled={!isPlayerReady || isEmpty} className="sideMusic-btn">
-          <FontAwesomeIcon icon={faForwardStep} style={{ fontSize: "1.5rem" }} />
+        <button onClick={() => changeIndex(1)} disabled={!isPlayerReady || isEmpty || realPlaylist.length <= 1} className="sideMusic-btn">
+          <FontAwesomeIcon icon={faForwardStep}  />
         </button>
         <button onClick={() => setIsShuffleOn((p) => !p)} className={`sideMusic-btn ${isShuffleOn ? "btn-active-side" : ""}`}>
-          <FontAwesomeIcon icon={faShuffle} style={{ fontSize: "1.5rem" }} />
+          <FontAwesomeIcon icon={faShuffle}  />
         </button>
       </div>
     );
@@ -287,10 +301,10 @@ const MusicPlayer = () => {
               {/* 모바일: 정적 타이틀/아티스트 */}
               <div className="song-info-mobile player-mobile-only">
                 <div className="song-title" style={showPlayingList ? { color: "pink" } : {}}>
-                  {songTitle}
+                  {ellipsis(songTitle, 20)}
                 </div>
                 <div className="song-artist" style={showPlayingList ? { color: "pink" } : {}}>
-                  {songArtist}
+                  {ellipsis(songArtist, 24)}
                 </div>
               </div>
               {/* 데스크탑: 흐르는 텍스트 */}

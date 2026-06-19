@@ -8,7 +8,7 @@ const playgroundData = [
     title: "뮤직 플레이어",
     img: "musicplayer",
     ex: "CM월드의 BGM 기능만 편하게 사용하고 싶다면? CM월드 모바일 버전을 PC에서 즐기고 싶다면? CM월드의 뮤직플레이어를 이용해보세요.",
-    url: "/musicplayer",
+    url: "/mp",
     isInternal: true,
   },
   {

@@ -66,7 +66,7 @@ export const Notice3AboutMusic = () => {
       </p>
       <p>
         뮤직플레이어만 따로 사용하고 싶으시면{" "}
-        <Link href="/musicplayer" className="text-basic hover:underline">
+        <Link href="/mp" className="text-basic hover:underline">
           뮤직플레이어
         </Link>
         에서 이용하실 수 있습니다.

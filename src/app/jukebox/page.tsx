@@ -4,11 +4,15 @@ import { useMusicStore } from "@/store";
 import { playlists } from "@/data/musicData";
 
 export default function JukeboxPage() {
-  const { playMusics, playlistCategory, selectPlaylist, setPlayMusics } =
+  const { allSongs, playlistCategory, viewCategory, selectPlaylist, setPlayMusics } =
     useMusicStore();
 
-  const displayLabel = playlistCategory
-    ? playlists[playlistCategory as keyof typeof playlists]
+  const viewSongs = viewCategory === "Total" || !viewCategory
+    ? allSongs
+    : allSongs.filter((m) => m.playlists.includes(viewCategory as keyof typeof playlists));
+
+  const displayLabel = viewCategory
+    ? playlists[viewCategory as keyof typeof playlists]
     : "플레이리스트를 선택해주세요";
 
   return (
@@ -17,24 +21,21 @@ export default function JukeboxPage() {
       <div className="px-4 py-2 border-b bg-white flex items-center gap-3 shrink-0">
         <button
           className="px-3 py-1 bg-basic text-white rounded-lg text-sm hover:opacity-90 transition-opacity disabled:opacity-40"
-          disabled={playMusics.length === 0}
+          disabled={viewSongs.length === 0}
           onClick={() => {
-            // 현재 목록 전체 재생 (순서 유지)
-            if (playlistCategory) {
-              selectPlaylist(playlistCategory);
-            }
+            if (viewCategory) selectPlaylist(viewCategory);
           }}
         >
           ▶ 전체 재생
         </button>
         <span className="text-sm text-gray-600">
           {displayLabel}
-          {playMusics.length > 0 && ` (${playMusics.length}곡)`}
+          {viewSongs.length > 0 && ` (${viewSongs.length}곡)`}
         </span>
       </div>
 
       {/* 테이블 헤더 */}
-      {playMusics.length > 0 && (
+      {viewSongs.length > 0 && (
         <div className="px-4 py-2 bg-gray-50 border-b grid grid-cols-[40px_1fr_1fr] gap-2 text-xs text-gray-500 font-semibold shrink-0">
           <div className="text-center">번호</div>
           <div>곡명</div>
@@ -44,13 +45,12 @@ export default function JukeboxPage() {
 
       {/* 음악 목록 */}
       <div className="flex-1 overflow-y-auto">
-        {playMusics.length === 0 ? (
-          // 플레이리스트 미선택 상태
+        {viewSongs.length === 0 ? (
           <div className="h-full flex items-center justify-center text-gray-400 text-sm">
             왼쪽에서 플레이리스트를 선택해주세요
           </div>
         ) : (
-          playMusics.map((music, index) => (
+          viewSongs.map((music, index) => (
             <div
               key={index}
               className="px-4 py-2 grid grid-cols-[40px_1fr_1fr] gap-2 items-center border-b hover:bg-blue-50 transition-colors group"
@@ -79,10 +79,7 @@ export default function JukeboxPage() {
               </div>
 
               {/* 아티스트 */}
-              <div
-                className="text-sm text-gray-500 truncate"
-                title={music.artist}
-              >
+              <div className="text-sm text-gray-500 truncate" title={music.artist}>
                 {music.artist}
               </div>
             </div>

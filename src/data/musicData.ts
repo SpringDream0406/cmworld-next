@@ -8,6 +8,7 @@ export type TPlaylistKey =
   | "Favorite"
   | "Rainy"
   | "Nolyrics"
+  | "Pick2026"
   | "Pick2025"
   | "Pick2024"
   | "Before2024";
@@ -29,6 +30,7 @@ export const playlists: Record<TPlaylistKey, string> = {
   Favorite: "춘몽's Pick!",
   Rainy: "비오는 날..",
   Nolyrics: "가사가 없는?!",
+  Pick2026: "2026 Pick",
   Pick2025: "2025 Pick",
   Pick2024: "2024 Pick",
   Before2024: "Before 2024 Pick",

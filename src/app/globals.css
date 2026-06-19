@@ -222,10 +222,14 @@
   background: none;
   color: black;
   cursor: pointer;
+  transition: font-size 0.1s ease;
 }
 .sideMusic-btn:hover {
   font-size: 2rem;
   color: black;
+}
+.sideMusic-btn:active {
+  color: #6e2c17;
 }
 .sideMusic-btn:disabled {
   color: gray;
@@ -456,6 +460,9 @@
   font-size: 0.875rem;
 }
 
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* 모바일 미디어 쿼리 (480px 이하) */
 @media (max-width: 480px) {
   .player-cm-music-txt { font-size: 2rem; padding: 0.5rem; }
@@ -468,5 +475,8 @@
   .player-list-label { font-size: 1.125rem; }
   .player-list-title { font-size: 0.875rem; }
   .player-list-artist { font-size: 0.75rem; }
+  .player-play-bar { gap: 0.5rem; }
+  .player-range { width: 60%; }
+  .player-time { width: auto; }
 }
 

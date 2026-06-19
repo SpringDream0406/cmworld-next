@@ -14,7 +14,9 @@ export const LayoutSelector = ({ children }: { children: ReactNode }) => {
     setIsMobileView(isMobile());
   }, []);
 
-  if (isMobileView || pathname === "/musicplayer") return <div className="w-screen h-dvh overflow-hidden"><MusicPlayer /></div>;
+  if (isMobileView || pathname === "/mp") return <div className="w-screen h-dvh overflow-hidden"><MusicPlayer /></div>;
+
+  if (pathname.startsWith("/cm")) return <>{children}</>;
 
   return (
     <BackgroundLayout>
