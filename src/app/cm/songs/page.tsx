@@ -219,8 +219,9 @@ export default function SongsPage() {
   const cleanUrl = (url: string) => {
     try {
       const u = new URL(url);
-      u.searchParams.delete("si");
-      return u.toString();
+      if (u.hostname.includes("youtube.com")) return u.searchParams.get("v") || url;
+      if (u.hostname === "youtu.be") return u.pathname.slice(1).split("?")[0];
+      return url;
     } catch {
       return url;
     }

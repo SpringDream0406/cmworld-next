@@ -136,10 +136,13 @@ const MusicPlayer = () => {
     }
   };
 
+  const getUrl = (id?: string) =>
+    id ? `https://www.youtube.com/watch?v=${id}` : undefined;
+
   const reactPlayerEl = (controls: boolean) => (
     <ReactPlayer
       ref={playerRef}
-      url={currentMusic?.url}
+      url={getUrl(currentMusic?.url)}
       playing={isPlaying}
       loop={realPlaylist.length === 1 || repeat}
       volume={volume / 100}
