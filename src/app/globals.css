@@ -335,6 +335,9 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: white;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .song-info-mobile .song-artist {
   height: 40%;
@@ -344,6 +347,9 @@
   align-items: flex-start;
   font-size: 0.8rem;
   color: rgb(200, 200, 200);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /* 풀 플레이어 컨트롤 바 */

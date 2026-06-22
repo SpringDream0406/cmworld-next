@@ -9,11 +9,16 @@ import MusicPlayer from "../musicPlayer/MusicPlayer";
 export const LayoutSelector = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const [isMobileView, setIsMobileView] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setIsMobileView(isMobile());
+    setMounted(true);
   }, []);
 
+  if (!mounted) return null;
+
+  if (pathname === "/mp-cm") return <div className="w-screen h-dvh overflow-hidden"><MusicPlayer nasMode /></div>;
   if (isMobileView || pathname === "/mp") return <div className="w-screen h-dvh overflow-hidden"><MusicPlayer /></div>;
 
   if (pathname.startsWith("/cm")) return <>{children}</>;

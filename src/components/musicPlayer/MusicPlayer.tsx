@@ -34,11 +34,13 @@ const shuffleArray = <T,>(arr: T[]): T[] =>
 const ellipsis = (text: string, max: number) =>
   text.length > max ? text.slice(0, max) + "..." : text;
 
-const MusicPlayer = () => {
+const NAS_BASE = "https://springdream0406.myqnapcloud.com:8081";
+
+const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
   const pathname = usePathname();
   const [isMobileView, setIsMobileView] = useState(false);
   useEffect(() => { setIsMobileView(isMobile()); }, []);
-  const isPlayer = isMobileView || pathname === "/mp";
+  const isPlayer = isMobileView || pathname === "/mp" || pathname === "/mp-cm";
 
   const { playMusics, playlistCategory, volume, setVolume, selectPlaylist, initSongs } =
     useMusicStore();
@@ -108,6 +110,24 @@ const MusicPlayer = () => {
     }
   }, [playMusics]);
 
+  useEffect(() => {
+    if (!songTitle || !("mediaSession" in navigator)) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: songTitle,
+      artist: songArtist,
+      album: "CM Music",
+      artwork: currentMusic?.url ? [
+        { src: `https://img.youtube.com/vi/${currentMusic.url}/mqdefault.jpg`, sizes: "320x180", type: "image/jpeg" },
+        { src: `https://img.youtube.com/vi/${currentMusic.url}/hqdefault.jpg`, sizes: "480x360", type: "image/jpeg" },
+      ] : [],
+    });
+    navigator.mediaSession.setActionHandler("previoustrack", () => changeIndex(-1));
+    navigator.mediaSession.setActionHandler("nexttrack", () => changeIndex(1));
+    navigator.mediaSession.setActionHandler("play", () => setIsPlaying(true));
+    navigator.mediaSession.setActionHandler("pause", () => setIsPlaying(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [songTitle, songArtist]);
+
   const changeIndex = (delta: number) => {
     if (realPlaylist.length === 0) return;
     setCurrentIndex((prev) => {
@@ -136,8 +156,11 @@ const MusicPlayer = () => {
     }
   };
 
-  const getUrl = (id?: string) =>
-    id ? `https://www.youtube.com/watch?v=${id}` : undefined;
+  const getUrl = (id?: string) => {
+    if (!id) return undefined;
+    if (nasMode) return `${NAS_BASE}/${id}.mp3`;
+    return `https://www.youtube.com/watch?v=${id}`;
+  };
 
   const reactPlayerEl = (controls: boolean) => (
     <ReactPlayer
@@ -280,23 +303,37 @@ const MusicPlayer = () => {
                 </div>
               )}
               {showPlayingList && (
-                <div className="h-full overflow-y-auto bg-black/65 rounded">
+                <div className="h-full overflow-y-auto bg-black/65 rounded" ref={(el) => {
+                  if (!el) return;
+                  const active = el.querySelector("[data-active='true']") as HTMLElement;
+                  if (active && el.scrollTop === 0) el.scrollTop = active.offsetTop - el.clientHeight / 2 + active.clientHeight / 2;
+                }}>
                   {realPlaylist.map((music, index) => (
                     <button
                       key={index}
+                      data-active={currentIndex === index}
                       onClick={() => { setCurrentIndex(index); setIsPlaying(true); setShowPlayingList(false); }}
-                      className="w-full text-center py-3 hover:bg-white/10 transition-colors border-none bg-transparent cursor-pointer"
+                      className="w-full text-center py-3 hover:bg-white/10 transition-colors border-none bg-transparent cursor-pointer px-3"
                     >
-                      <div className={`player-list-title font-medium ${currentIndex === index ? "text-pink-300" : "text-white"}`}>{music.title}</div>
-                      <div className="player-list-artist text-white/60">{music.artist}</div>
+                      <div className={`player-list-title font-medium truncate ${currentIndex === index ? "text-pink-300" : "text-white"}`}>{music.title}</div>
+                      <div className="player-list-artist text-white/60 truncate">{music.artist}</div>
                     </button>
                   ))}
                 </div>
               )}
-              {/* YouTube 영상 - 목록 안 띄울 때만 보임, 오디오는 항상 재생 */}
+              {/* 영상/썸네일 - 목록 안 띄울 때만 보임 */}
               <div style={{ height: showPlaylist || showPlayingList ? 0 : "100%", overflow: "hidden" }}>
-                {reactPlayerEl(false)}
+                {nasMode && currentMusic?.url
+                  ? <img src={`https://img.youtube.com/vi/${currentMusic.url}/hqdefault.jpg`} alt={songTitle} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }} />
+                  : reactPlayerEl(false)
+                }
               </div>
+              {/* nasMode 오디오 플레이어 - 항상 숨김 마운트 */}
+              {nasMode && (
+                <div style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none", overflow: "hidden" }}>
+                  {reactPlayerEl(false)}
+                </div>
+              )}
             </div>
 
             {/* 곡 정보 */}
@@ -304,10 +341,10 @@ const MusicPlayer = () => {
               {/* 모바일: 정적 타이틀/아티스트 */}
               <div className="song-info-mobile player-mobile-only">
                 <div className="song-title" style={showPlayingList ? { color: "pink" } : {}}>
-                  {ellipsis(songTitle, 20)}
+                  {songTitle}
                 </div>
                 <div className="song-artist" style={showPlayingList ? { color: "pink" } : {}}>
-                  {ellipsis(songArtist, 24)}
+                  {songArtist}
                 </div>
               </div>
               {/* 데스크탑: 흐르는 텍스트 */}
@@ -411,12 +448,15 @@ const MusicPlayer = () => {
         <span className="text-xs text-gray-600 w-7 text-right shrink-0 tabular-nums">{muted ? 0 : volume}</span>
       </div>
 
-      {/* YouTube 플레이어 - 항상 마운트, 열리면 보이게 / 닫히면 숨김 */}
+      {/* 플레이어 - 항상 마운트, 열리면 보이게 / 닫히면 숨김 */}
       <div style={isVideoOpen
         ? { width: "100%", aspectRatio: "16/9" }
         : { position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none", overflow: "hidden" }
       }>
-        {reactPlayerEl(isVideoOpen)}
+        {nasMode && isVideoOpen && currentMusic?.url
+          ? <img src={`https://img.youtube.com/vi/${currentMusic.url}/hqdefault.jpg`} alt={songTitle} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          : reactPlayerEl(isVideoOpen)
+        }
       </div>
     </div>
   );
