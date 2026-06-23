@@ -9,9 +9,15 @@ export async function GET(req: NextRequest) {
   const range = req.headers.get("range") ?? undefined;
   const nasUrl = `${NAS_BASE}/${id}.mp3`;
 
-  const nasRes = await fetch(nasUrl, {
-    headers: range ? { Range: range } : {},
-  });
+  let nasRes: Response;
+  try {
+    nasRes = await fetch(nasUrl, {
+      headers: range ? { Range: range } : {},
+    });
+  } catch (e) {
+    console.error("NAS fetch error:", e);
+    return NextResponse.json({ error: String(e) }, { status: 502 });
+  }
 
   const headers = new Headers();
   headers.set("Content-Type", "audio/mpeg");
