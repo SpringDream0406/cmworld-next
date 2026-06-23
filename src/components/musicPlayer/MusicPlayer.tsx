@@ -20,8 +20,6 @@ import {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false }) as any;
 
-type PlayerRef = { seekTo: (amount: number, type?: string) => void };
-
 const formatTime = (seconds: number): string => {
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
@@ -31,10 +29,6 @@ const formatTime = (seconds: number): string => {
 const shuffleArray = <T,>(arr: T[]): T[] =>
   [...arr].sort(() => Math.random() - 0.5);
 
-const ellipsis = (text: string, max: number) =>
-  text.length > max ? text.slice(0, max) + "..." : text;
-
-const NAS_BASE = "https://springdream0406.myqnapcloud.com:8081";
 
 const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
   const pathname = usePathname();
@@ -68,6 +62,8 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const playerRef = useRef<any>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const seekingRef = useRef(false);
 
   const realPlaylist = useMemo(
     () => (isShuffleOn ? shuffledPlaylist : playMusics),
@@ -112,6 +108,20 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
   }, [playMusics]);
 
   useEffect(() => {
+    if (!nasMode || !audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.play().catch(() => {});
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying, nasMode, currentIndex]);
+
+  useEffect(() => {
+    if (!nasMode || !audioRef.current) return;
+    audioRef.current.volume = volume / 100;
+  }, [volume, nasMode]);
+
+  useEffect(() => {
     if (!songTitle || !("mediaSession" in navigator)) return;
     navigator.mediaSession.metadata = new MediaMetadata({
       title: songTitle,
@@ -140,13 +150,23 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
       return next;
     });
     setIsPlayerReady(false);
+    setPlayed(0);
+    setPlayedSeconds(0);
+    setDuration("00:00");
   };
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Number(e.target.value);
+  const seek = (val: number) => {
+    seekingRef.current = true;
     setPlayed(val);
-    playerRef.current?.seekTo(val, "fraction");
+    if (nasMode && audioRef.current && audioRef.current.duration) {
+      audioRef.current.currentTime = val * audioRef.current.duration;
+    } else {
+      playerRef.current?.seekTo(val);
+    }
+    setTimeout(() => { seekingRef.current = false; }, 1000);
   };
+
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => seek(Number(e.target.value));
 
   const handleMuteToggle = () => {
     if (!muted) {
@@ -161,7 +181,7 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
 
   const getUrl = (id?: string) => {
     if (!id) return undefined;
-    if (nasMode) return `${NAS_BASE}/${id}.mp3`;
+    if (nasMode) return `/api/nas-audio?id=${id}`;
     return `https://www.youtube.com/watch?v=${id}`;
   };
 
@@ -186,10 +206,15 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
         setSongArtist(currentMusic?.artist || "");
         const dur = playerRef.current?.getDuration?.();
         if (dur) setDuration(formatTime(dur));
+        setTimeout(() => {
+          const internal = playerRef.current?.getInternalPlayer?.();
+          if (internal?.setVolume) internal.setVolume(useMusicStore.getState().volume);
+        }, 300);
       }}
       onDuration={(dur: number) => { if (dur) setDuration(formatTime(dur)); }}
       onEnded={() => { changeIndex(1); setIsPlayerReady(false); setIsPlaying(true); }}
       onProgress={({ played, playedSeconds }: { played: number; playedSeconds: number }) => {
+        if (seekingRef.current) return;
         setPlayed(played);
         setPlayedSeconds(playedSeconds);
       }}
@@ -332,35 +357,35 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
                   : reactPlayerEl(false)
                 }
               </div>
-              {/* nasMode 오디오 플레이어 - 단일 인스턴스로 항상 숨김 마운트 */}
-              {nasMode && (
-                <div style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none", overflow: "hidden" }}>
-                  <ReactPlayer
-                    ref={playerRef}
-                    url={getUrl(currentMusic?.url)}
-                    playing={isPlaying}
-                    loop={realPlaylist.length === 1 || repeat}
-                    volume={volume / 100}
-                    width="1px"
-                    height="1px"
-                    onPlay={() => { setIsPlaying(true); setIsLoading(false); }}
-                    onPause={() => setIsPlaying(false)}
-                    onBuffer={() => setIsLoading(true)}
-                    onBufferEnd={() => setIsLoading(false)}
-                    onReady={() => {
-                      setIsPlayerReady(true);
-                      setIsLoading(false);
-                      setSongTitle(currentMusic?.title || "");
-                      setSongArtist(currentMusic?.artist || "");
-                    }}
-                    onDuration={(dur: number) => { if (dur) setDuration(formatTime(dur)); }}
-                    onEnded={() => { changeIndex(1); setIsPlayerReady(false); setIsPlaying(true); }}
-                    onProgress={({ played, playedSeconds }: { played: number; playedSeconds: number }) => {
-                      setPlayed(played);
-                      setPlayedSeconds(playedSeconds);
-                    }}
-                  />
-                </div>
+              {/* nasMode 오디오 플레이어 - native audio 태그 직접 사용 */}
+              {nasMode && currentMusic?.url && (
+                <audio
+                  ref={audioRef}
+                  src={getUrl(currentMusic.url)}
+                  style={{ display: "none" }}
+                  loop={realPlaylist.length === 1 || repeat}
+                  onPlay={(e) => { const a = e.target as HTMLAudioElement; a.volume = useMusicStore.getState().volume / 100; setIsPlaying(true); setIsLoading(false); setIsPlayerReady(true); setSongTitle(currentMusic?.title || ""); setSongArtist(currentMusic?.artist || ""); }}
+                  onPause={() => setIsPlaying(false)}
+                  onWaiting={() => setIsLoading(true)}
+                  onCanPlay={() => setIsLoading(false)}
+                  onLoadedMetadata={(e) => {
+                    const dur = (e.target as HTMLAudioElement).duration;
+                    if (dur) setDuration(formatTime(dur));
+                    setIsPlayerReady(true);
+                    setSongTitle(currentMusic?.title || "");
+                    setSongArtist(currentMusic?.artist || "");
+                  }}
+                  onSeeked={() => { seekingRef.current = false; }}
+                  onEnded={() => { changeIndex(1); setIsPlaying(true); }}
+                  onTimeUpdate={(e) => {
+                    if (seekingRef.current) return;
+                    const audio = e.target as HTMLAudioElement;
+                    if (audio.duration) {
+                      setPlayed(audio.currentTime / audio.duration);
+                      setPlayedSeconds(audio.currentTime);
+                    }
+                  }}
+                />
               )}
             </div>
 
@@ -388,9 +413,10 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
               <div className="player-play-bar">
                 <span className="player-time">{formatTime(playedSeconds)}</span>
                 <input
-                  type="range" min={0} max={1} step={0.001} value={played}
+                  type="range" min={0} max={0.999999} step="any"
+                  value={played}
                   onChange={handleSeek}
-                  onTouchEnd={(e) => { const val = Number((e.target as HTMLInputElement).value); setPlayed(val); playerRef.current?.seekTo(val, "fraction"); }}
+                  onTouchEnd={(e) => seek(Number((e.target as HTMLInputElement).value))}
                   disabled={isEmpty}
                   className="player-range h-1 disabled:opacity-40"
                 />

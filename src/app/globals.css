@@ -371,6 +371,21 @@
   width: 70%;
   accent-color: white;
 }
+.player-range::-webkit-slider-thumb {
+  width: 1.5rem;
+  height: 1.5rem;
+  pointer-events: all;
+}
+.player-range::-moz-range-thumb {
+  width: 1.5rem;
+  height: 1.5rem;
+  pointer-events: all;
+}
+.player-range::-ms-thumb {
+  width: 1.5rem;
+  height: 1.5rem;
+  pointer-events: all;
+}
 .player-play-btns {
   height: 50%;
   display: flex;

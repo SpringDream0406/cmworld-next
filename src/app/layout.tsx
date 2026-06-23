@@ -47,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <head>
         <meta
           name="google-site-verification"
@@ -58,7 +58,7 @@ export default function RootLayout({
           content="3d6acc45d674c841efc963f4f856354fc58296e7"
         />
       </head>
-      <body className={`${inter.variable}`}>
+      <body className={`${inter.variable}`} suppressHydrationWarning>
         {/* 모바일인지, musicplayer 경로인지 체크 후 반영 */}
         <LayoutSelector>{children}</LayoutSelector>
       </body>
