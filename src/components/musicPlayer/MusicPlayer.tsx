@@ -184,7 +184,8 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
         const dur = playerRef.current?.getDuration?.();
         if (dur) setDuration(formatTime(dur));
       }}
-      onEnded={() => { changeIndex(1); setIsPlayerReady(false); }}
+      onDuration={(dur: number) => { if (dur) setDuration(formatTime(dur)); }}
+      onEnded={() => { changeIndex(1); setIsPlayerReady(false); setIsPlaying(true); }}
       onProgress={({ played, playedSeconds }: { played: number; playedSeconds: number }) => {
         setPlayed(played);
         setPlayedSeconds(playedSeconds);
@@ -328,10 +329,34 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
                   : reactPlayerEl(false)
                 }
               </div>
-              {/* nasMode 오디오 플레이어 - 항상 숨김 마운트 */}
+              {/* nasMode 오디오 플레이어 - 단일 인스턴스로 항상 숨김 마운트 */}
               {nasMode && (
                 <div style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none", overflow: "hidden" }}>
-                  {reactPlayerEl(false)}
+                  <ReactPlayer
+                    ref={playerRef}
+                    url={getUrl(currentMusic?.url)}
+                    playing={isPlaying}
+                    loop={realPlaylist.length === 1 || repeat}
+                    volume={volume / 100}
+                    width="1px"
+                    height="1px"
+                    onPlay={() => { setIsPlaying(true); setIsLoading(false); }}
+                    onPause={() => setIsPlaying(false)}
+                    onBuffer={() => setIsLoading(true)}
+                    onBufferEnd={() => setIsLoading(false)}
+                    onReady={() => {
+                      setIsPlayerReady(true);
+                      setIsLoading(false);
+                      setSongTitle(currentMusic?.title || "");
+                      setSongArtist(currentMusic?.artist || "");
+                    }}
+                    onDuration={(dur: number) => { if (dur) setDuration(formatTime(dur)); }}
+                    onEnded={() => { changeIndex(1); setIsPlayerReady(false); setIsPlaying(true); }}
+                    onProgress={({ played, playedSeconds }: { played: number; playedSeconds: number }) => {
+                      setPlayed(played);
+                      setPlayedSeconds(playedSeconds);
+                    }}
+                  />
                 </div>
               )}
             </div>
@@ -361,7 +386,7 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
                 <span className="player-time">{formatTime(playedSeconds)}</span>
                 <input
                   type="range" min={0} max={1} step={0.001} value={played}
-                  onChange={handleSeek} disabled={isEmpty}
+                  onChange={handleSeek} onTouchEnd={handleSeek} disabled={isEmpty}
                   className="player-range h-1 disabled:opacity-40"
                 />
                 <span className="player-time">{duration}</span>
