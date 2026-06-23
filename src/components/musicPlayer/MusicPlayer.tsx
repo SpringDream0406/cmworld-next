@@ -39,7 +39,8 @@ const NAS_BASE = "https://springdream0406.myqnapcloud.com:8081";
 const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
   const pathname = usePathname();
   const [isMobileView, setIsMobileView] = useState(false);
-  useEffect(() => { setIsMobileView(isMobile()); }, []);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setIsMobileView(isMobile()); setMounted(true); }, []);
   const isPlayer = isMobileView || pathname === "/mp" || pathname === "/mp-cm";
 
   const { playMusics, playlistCategory, volume, setVolume, selectPlaylist, initSongs } =
@@ -127,6 +128,8 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
     navigator.mediaSession.setActionHandler("pause", () => setIsPlaying(false));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [songTitle, songArtist]);
+
+  if (!mounted) return null;
 
   const changeIndex = (delta: number) => {
     if (realPlaylist.length === 0) return;
@@ -480,8 +483,10 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
         ? { width: "100%", aspectRatio: "16/9" }
         : { position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none", overflow: "hidden" }
       }>
-        {nasMode && isVideoOpen && currentMusic?.url
-          ? <img src={`https://img.youtube.com/vi/${currentMusic.url}/hqdefault.jpg`} alt={songTitle} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        {nasMode
+          ? (isVideoOpen && currentMusic?.url
+              ? <img src={`https://img.youtube.com/vi/${currentMusic.url}/hqdefault.jpg`} alt={songTitle} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              : null)
           : reactPlayerEl(isVideoOpen)
         }
       </div>
