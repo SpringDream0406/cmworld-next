@@ -386,7 +386,9 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
                 <span className="player-time">{formatTime(playedSeconds)}</span>
                 <input
                   type="range" min={0} max={1} step={0.001} value={played}
-                  onChange={handleSeek} onTouchEnd={handleSeek} disabled={isEmpty}
+                  onChange={handleSeek}
+                  onTouchEnd={(e) => { const val = Number((e.target as HTMLInputElement).value); setPlayed(val); playerRef.current?.seekTo(val, "fraction"); }}
+                  disabled={isEmpty}
                   className="player-range h-1 disabled:opacity-40"
                 />
                 <span className="player-time">{duration}</span>
