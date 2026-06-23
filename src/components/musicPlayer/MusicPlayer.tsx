@@ -181,7 +181,7 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
 
   const getUrl = (id?: string) => {
     if (!id) return undefined;
-    if (nasMode) return `/api/nas-audio?id=${id}`;
+    if (nasMode) return `https://springdream0406.myqnapcloud.com:8081/${id}.mp3`;
     return `https://www.youtube.com/watch?v=${id}`;
   };
 
