@@ -11,7 +11,7 @@ export const useMusicStore = create(
         playMusics: [] as IMusicData[],
         playlistCategory: "",
         viewCategory: "",
-        volume: 70,
+        volume: 10,
       },
       (set, get) => ({
         initSongs: async () => {

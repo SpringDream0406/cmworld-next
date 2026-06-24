@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useMusicStore } from "@/store";
 import { playlists, IMusicData } from "@/data/musicData";
 import { isMobile } from "@/utils";
@@ -32,6 +32,7 @@ const shuffleArray = <T,>(arr: T[]): T[] =>
 
 const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMobileView, setIsMobileView] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setIsMobileView(isMobile()); setMounted(true); }, []);
@@ -449,9 +450,9 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
       {/* 흐르는 곡 정보 - 클릭 시 YouTube 영상 토글 */}
       <div
         className="flex-[3] flex items-center overflow-hidden cursor-pointer"
-        onClick={() => setIsVideoOpen((p) => !p)}
+        onClick={() => isEmpty ? router.push("/jukebox") : setIsVideoOpen((p) => !p)}
       >
-        <div className={`flow-text ${!isPlaying ? "paused" : ""}`}>
+        <div className={`flow-text ${!isPlaying && !isEmpty ? "paused" : ""}`}>
           {Array.from({ length: 7 }, (_, i) => (
             <div key={i} className="flow-wrap">{songInfo}</div>
           ))}
@@ -491,7 +492,7 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
       </div>
 
       {/* 볼륨 슬라이더 */}
-      <div className="flex-[2] flex items-center px-3 gap-2">
+      <div className="flex-[2] flex items-center px-3 gap-2 min-w-0 overflow-hidden">
         <button onClick={handleMuteToggle} className="border-none bg-transparent outline-none cursor-pointer shrink-0">
           {muted || volume === 0 ? <VolumeX size={18} className="text-gray-500" /> : <Volume2 size={18} />}
         </button>

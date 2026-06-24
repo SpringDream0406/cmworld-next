@@ -2,36 +2,40 @@
 
 import { useSettingStore } from "@/store";
 
+const BACKGROUNDS = [
+  { key: "Basic", label: "기본" },
+  { key: "Clear", label: "맑음" },
+  { key: "Clouds", label: "흐림" },
+  { key: "Rain", label: "비" },
+  { key: "Mist", label: "안개" },
+  { key: "Snow", label: "눈" },
+  { key: "Thunderstorm", label: "뇌우" },
+];
+
 export default function SettingPage() {
-  const { savePlaylist, setSavePlaylist } = useSettingStore();
+  const { background, setBackground } = useSettingStore();
 
   return (
     <div className="w-full h-full p-6 overflow-auto">
-      <h2 className="text-lg font-bold mb-6">뮤직 플레이어</h2>
-
-      {/* 플레이리스트 저장 토글 */}
-      <div className="flex items-center justify-between py-4 border-b">
-        <div>
-          <div className="font-medium">플레이리스트 저장</div>
-          <div className="text-xs text-gray-500 mt-0.5">
-            localStorage에 저장됩니다.
-          </div>
-        </div>
-        {/* 토글 스위치 */}
-        <button
-          role="switch"
-          aria-checked={savePlaylist}
-          onClick={() => setSavePlaylist(!savePlaylist)}
-          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ${
-            savePlaylist ? "bg-basic" : "bg-gray-300"
-          }`}
-        >
-          <span
-            className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform transition duration-200 ${
-              savePlaylist ? "translate-x-5" : "translate-x-0"
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        {BACKGROUNDS.map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => setBackground(key)}
+            className={`relative rounded-xl overflow-hidden aspect-video border-2 transition-all cursor-pointer ${
+              background === key ? "border-blue-500 scale-[1.03]" : "border-transparent hover:border-gray-400"
             }`}
-          />
-        </button>
+          >
+            <img
+              src={`/images/backgrounds/${key}.webp`}
+              alt={label}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-x-0 bottom-0 bg-black/40 text-white text-xs py-1 text-center">
+              {label}
+            </div>
+          </button>
+        ))}
       </div>
     </div>
   );

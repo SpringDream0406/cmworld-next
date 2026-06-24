@@ -43,7 +43,7 @@ export default function PlaygroundPage() {
             {/* 이미지 */}
             <div className="w-full aspect-video bg-gray-100 rounded-lg overflow-hidden mb-3 flex items-center justify-center">
               <img
-                src={`/images/playground/${item.img}.png`}
+                src={`/images/playground/${item.img}.webp`}
                 alt={item.title}
                 className="w-full h-full object-cover"
                 onError={(e) => {

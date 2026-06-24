@@ -130,6 +130,14 @@ function SortableRow({
   );
 }
 
+interface CheckResult {
+  id: number;
+  url: string;
+  title: string;
+  artist: string;
+  reason: string;
+}
+
 export default function SongsPage() {
   const router = useRouter();
   const [songs, setSongs] = useState<Song[]>([]);
@@ -139,6 +147,8 @@ export default function SongsPage() {
   const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState("");
   const [filterPlaylist, setFilterPlaylist] = useState<string>("Total");
+  const [checking, setChecking] = useState(false);
+  const [checkResults, setCheckResults] = useState<{ unavailable: CheckResult[]; total: number } | null>(null);
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -261,16 +271,34 @@ export default function SongsPage() {
     );
   };
 
+  const handleCheck = async () => {
+    setChecking(true);
+    setCheckResults(null);
+    const res = await fetch("/api/check-songs");
+    const data = await res.json();
+    setCheckResults(data);
+    setChecking(false);
+  };
+
   return (
     <div className="h-screen flex flex-col p-6 max-w-5xl mx-auto">
       <div className="flex items-center justify-between mb-6 shrink-0">
         <h1 className="text-2xl font-bold">곡 관리 ({filteredSongs.length})</h1>
-        <button
-          onClick={openAdd}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded font-medium transition-colors"
-        >
-          + 곡 추가
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleCheck}
+            disabled={checking}
+            className="px-4 py-2 bg-yellow-700 hover:bg-yellow-600 disabled:opacity-50 rounded font-medium transition-colors text-sm"
+          >
+            {checking ? "체크 중..." : "재생 가능 체크"}
+          </button>
+          <button
+            onClick={openAdd}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded font-medium transition-colors"
+          >
+            + 곡 추가
+          </button>
+        </div>
       </div>
 
       <div className="flex gap-3 mb-4 flex-wrap shrink-0">
@@ -402,6 +430,39 @@ export default function SongsPage() {
                 저장
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {checkResults && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-xl p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold">유튜브 체크 결과</h2>
+              <button onClick={() => setCheckResults(null)} className="text-gray-400 hover:text-white text-xl">✕</button>
+            </div>
+            <p className="text-sm text-gray-400 mb-4">총 {checkResults.total}곡 중 재생 불가 {checkResults.unavailable.length}곡</p>
+            {checkResults.unavailable.length === 0 ? (
+              <p className="text-sm text-green-400">모두 정상 재생 가능</p>
+            ) : (
+              <ul className="flex flex-col gap-1">
+                {checkResults.unavailable.map((s) => (
+                  <li key={s.id} className="text-sm bg-gray-700 rounded px-3 py-1.5 flex items-center gap-2">
+                    <span className="text-gray-400 text-xs">#{s.id}</span>
+                    <span className="flex-1">{s.artist} - {s.title}</span>
+                    <span className="text-xs text-red-400 shrink-0">{s.reason}</span>
+                    <a
+                      href={`https://www.youtube.com/watch?v=${s.url}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs text-blue-400 hover:underline shrink-0"
+                    >
+                      {s.url}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       )}

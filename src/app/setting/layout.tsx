@@ -5,7 +5,7 @@ import { LeftBasic } from "@/components/left/LeftBasic";
 const SettingLeftContent = () => (
   <div className="p-2">
     <div className="px-3 py-2 bg-basic text-white rounded-lg text-sm font-medium">
-      뮤직 플레이어
+      배경 설정
     </div>
   </div>
 );
