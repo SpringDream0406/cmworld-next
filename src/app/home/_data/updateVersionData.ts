@@ -1,5 +1,15 @@
 export const updateVersionData = [
   {
+    title: "- 3.0.0",
+    sub: [
+      {
+        version: "- 3.0.0",
+        change: "Next.js와 Supabase로 리팩토링 및 마이그레이션",
+        date: "2026-06-24",
+      },
+    ],
+  },
+  {
     title: "- 2.0.0",
     sub: [
       {
