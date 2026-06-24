@@ -22,7 +22,7 @@ const playgroundData = [
     title: "팜팜",
     img: "farmfarm",
     ex: `광주 인공지능사관학교 4기 App반의 1차 프로젝트, 에비앙(App이앙)조의 "도심 농부를 위한 텃밭 분양 플랫폼" 데모 사이트를 경험해보세요.`,
-    url: "http://farmfarm-front.s3-website.ap-northeast-2.amazonaws.com/",
+    url: "https://farmfarm.springdream.kr/",
     isInternal: false,
   },
 ];
