@@ -28,7 +28,7 @@ export const ScSelect = ({
 }: IScSelectProps) => {
   return (
     <Select onValueChange={onChange} defaultValue={defaultValue}>
-      <SelectTrigger className={`${className}`}>
+      <SelectTrigger className={`${className} bg-transparent dark:bg-transparent hover:bg-transparent dark:hover:bg-transparent`}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
