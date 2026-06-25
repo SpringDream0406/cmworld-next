@@ -71,9 +71,14 @@ export const profileData: ProfileSection[] = [
     type: "text",
     items: [
       {
+        title: "제이케이링크",
+        description: "풀스택 개발자",
+        period: "2025.08 ~",
+      },
+      {
         title: "블루밍하트",
         description: "인턴 (광주 일경험 드림)",
-        period: "2025.03 ~",
+        period: "2025.03 ~ 2025.07",
       },
     ],
   },

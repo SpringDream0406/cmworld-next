@@ -25,6 +25,7 @@ export default function GuestbookPage() {
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [isSecret, setIsSecret] = useState(false);
   const [replyInputs, setReplyInputs] = useState<Record<number, string>>({});
+  const [loadingPosts, setLoadingPosts] = useState(true);
   const textRef = useRef<HTMLTextAreaElement>(null);
 
   const isAdmin = user?.email === ADMIN_EMAIL;
@@ -45,6 +46,7 @@ export default function GuestbookPage() {
       .eq("is_deleted", false)
       .order("created_at", { ascending: false });
     if (data) setPosts(data as Post[]);
+    setLoadingPosts(false);
   };
 
   const canViewSecret = (post: Post) =>
@@ -131,6 +133,11 @@ export default function GuestbookPage() {
 
       {/* 글 목록 */}
       <div className="flex-1 overflow-y-auto">
+        {loadingPosts ? (
+          <div className="flex items-center justify-center h-full text-gray-400 text-sm">불러오는 중...</div>
+        ) : posts.length === 0 ? (
+          <div className="flex items-center justify-center h-full text-gray-400 text-sm">아직 방명록이 없습니다.</div>
+        ) : null}
         {posts.map((post) => {
           const isSecret = post.is_secret && !canViewSecret(post);
           return (

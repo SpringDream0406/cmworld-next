@@ -17,6 +17,7 @@ export interface IProjectData {
 // 프로젝트 태그 레이블
 export const projectTags = {
   total: "Total",
+  business: "Business",
   team: "Team",
   personal: "Personal",
   y2025: "2025",
@@ -28,7 +29,7 @@ export const projectTags = {
 export const projectData: IProjectData[] = [
   {
     title: "GoingTogether",
-    where: "팀 프로젝트",
+    where: "JKLink",
     when: "2025.01 ~ 진행 중",
     sub: "체험학습 연계 앱",
     exp: [
@@ -46,7 +47,7 @@ export const projectData: IProjectData[] = [
         },
       ],
     },
-    tags: [projectTags.team, projectTags.y2025],
+    tags: [projectTags.business, projectTags.y2025],
   },
   {
     title: "CMSPP (CM Solar Power Plant)",
