@@ -250,14 +250,17 @@ export default function SongsPage() {
   const handleSave = async () => {
     if (!form.url || !form.artist || !form.title) return;
     const data = { ...form, url: cleanUrl(form.url) };
+    let error;
     if (editingSong) {
-      await supabase.from("songs").update(data).eq("id", editingSong.id);
+      ({ error } = await supabase.from("songs").update(data).eq("id", editingSong.id));
     } else {
       const maxOrder =
         songs.length > 0 ? Math.max(...songs.map((s) => s.sort_order)) : 0;
-      await supabase
-        .from("songs")
-        .insert({ ...data, sort_order: maxOrder + 1 });
+      ({ error } = await supabase.from("songs").insert({ ...data, sort_order: maxOrder + 1 }));
+    }
+    if (error) {
+      alert(`저장 실패: ${error.message}`);
+      return;
     }
     setShowForm(false);
     fetchSongs();
