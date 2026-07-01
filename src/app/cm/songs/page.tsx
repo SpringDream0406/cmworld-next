@@ -265,7 +265,7 @@ export default function SongsPage() {
     if (editingSong) {
       ({ error } = await supabase.from("songs").update(data).eq("id", editingSong.id));
     } else {
-      const normalSongs = songs.filter((s) => s.sort_order !== 99999);
+      const normalSongs = songs.filter((s) => s.id !== 1);
       const maxOrder = normalSongs.length > 0 ? Math.max(...normalSongs.map((s) => s.sort_order)) : 0;
       ({ error } = await supabase.from("songs").insert({ ...data, sort_order: maxOrder + 1 }));
     }
