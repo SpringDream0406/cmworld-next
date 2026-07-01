@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { useAuthStore } from "@/store";
 import { playlists, TPlaylistKey } from "@/data/musicData";
 import {
   DndContext,
@@ -138,8 +139,11 @@ interface CheckResult {
   reason: string;
 }
 
+const ADMIN_EMAIL = "springdream0406@gmail.com";
+
 export default function SongsPage() {
   const router = useRouter();
+  const { user, loading: authLoading, init } = useAuthStore();
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingSong, setEditingSong] = useState<Song | null>(null);
@@ -153,12 +157,18 @@ export default function SongsPage() {
   const sensors = useSensors(useSensor(PointerSensor));
 
   useEffect(() => {
-    if (sessionStorage.getItem("cm-auth") !== "true") {
+    const unsubscribe = init();
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user || user.email !== ADMIN_EMAIL) {
       router.replace("/cm");
       return;
     }
     fetchSongs();
-  }, []);
+  }, [user, authLoading]);
 
   const fetchSongs = async () => {
     setLoading(true);
