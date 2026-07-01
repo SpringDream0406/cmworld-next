@@ -157,6 +157,17 @@ export default function SongsPage() {
   const sensors = useSensors(useSensor(PointerSensor));
 
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setShowForm(false);
+        setCheckResults(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = init();
     return unsubscribe;
   }, []);

@@ -38,14 +38,12 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
   useEffect(() => { setIsMobileView(isMobile()); setMounted(true); }, []);
   const isPlayer = isMobileView || pathname === "/mp" || pathname === "/mp-cm";
 
-  const { playMusics, playlistCategory, volume, setVolume, selectPlaylist, initSongs } =
+  const { playMusics, playlistCategory, volume, setVolume, selectPlaylist, initSongs, currentIndex, setCurrentIndex, isShuffleOn, setIsShuffleOn } =
     useMusicStore();
 
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const isFirstLoad = useRef(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [isShuffleOn, setIsShuffleOn] = useState(false);
   const [repeat, setRepeat] = useState(false);
   const [played, setPlayed] = useState(0);
   const [playedSeconds, setPlayedSeconds] = useState(0);
@@ -144,12 +142,8 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
 
   const changeIndex = (delta: number) => {
     if (realPlaylist.length === 0) return;
-    setCurrentIndex((prev) => {
-      const next = prev + delta;
-      if (next < 0) return realPlaylist.length - 1;
-      if (next >= realPlaylist.length) return 0;
-      return next;
-    });
+    const next = currentIndex + delta;
+    setCurrentIndex(next < 0 ? realPlaylist.length - 1 : next >= realPlaylist.length ? 0 : next);
     setIsPlayerReady(false);
     setPlayed(0);
     setPlayedSeconds(0);
@@ -241,7 +235,7 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
           <button onClick={() => changeIndex(1)} disabled={!isPlayerReady || isEmpty || realPlaylist.length <= 1}>
             <FontAwesomeIcon icon={faForwardStep} style={{ fontSize: "1em" }} />
           </button>
-          <button onClick={() => setIsShuffleOn((p) => !p)} className={isShuffleOn ? activeCls : ""}>
+          <button onClick={() => setIsShuffleOn(!isShuffleOn)} className={isShuffleOn ? activeCls : ""}>
             <FontAwesomeIcon icon={faShuffle} style={{ fontSize: "1em" }} />
           </button>
         </div>
@@ -262,7 +256,7 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
         <button onClick={() => changeIndex(1)} disabled={!isPlayerReady || isEmpty || realPlaylist.length <= 1} className="sideMusic-btn">
           <FontAwesomeIcon icon={faForwardStep}  />
         </button>
-        <button onClick={() => setIsShuffleOn((p) => !p)} className={`sideMusic-btn ${isShuffleOn ? "btn-active-side" : ""}`}>
+        <button onClick={() => setIsShuffleOn(!isShuffleOn)} className={`sideMusic-btn ${isShuffleOn ? "btn-active-side" : ""}`}>
           <FontAwesomeIcon icon={faShuffle}  />
         </button>
       </div>

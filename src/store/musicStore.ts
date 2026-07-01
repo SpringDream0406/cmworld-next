@@ -12,6 +12,8 @@ export const useMusicStore = create(
         playlistCategory: "",
         viewCategory: "",
         volume: 10,
+        currentIndex: 0,
+        isShuffleOn: false,
       },
       (set, get) => ({
         initSongs: async () => {
@@ -58,6 +60,8 @@ export const useMusicStore = create(
         },
 
         setVolume: (volume: number) => set({ volume }),
+        setCurrentIndex: (currentIndex: number) => set({ currentIndex }),
+        setIsShuffleOn: (isShuffleOn: boolean) => set({ isShuffleOn }),
       }),
     ),
     {
@@ -65,6 +69,8 @@ export const useMusicStore = create(
       partialize: (state) => ({
         volume: state.volume,
         playlistCategory: state.playlistCategory,
+        currentIndex: state.currentIndex,
+        isShuffleOn: state.isShuffleOn,
       }),
     },
   ),
