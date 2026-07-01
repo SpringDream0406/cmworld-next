@@ -7,8 +7,13 @@ import { useAuthStore } from "@/store";
 const ADMIN_EMAIL = "springdream0406@gmail.com";
 
 export default function CmLoginPage() {
-  const { user, loading, signInWithGoogle } = useAuthStore();
+  const { user, loading, init, signInWithGoogle } = useAuthStore();
   const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = init();
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     if (!loading && user) {
