@@ -254,9 +254,7 @@ export default function SongsPage() {
     if (editingSong) {
       ({ error } = await supabase.from("songs").update(data).eq("id", editingSong.id));
     } else {
-      const maxOrder =
-        songs.length > 0 ? Math.max(...songs.map((s) => s.sort_order)) : 0;
-      ({ error } = await supabase.from("songs").insert({ ...data, sort_order: maxOrder + 1 }));
+      ({ error } = await supabase.from("songs").insert({ ...data, sort_order: 1 }));
     }
     if (error) {
       alert(`저장 실패: ${error.message}`);
