@@ -43,6 +43,7 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const isFirstLoad = useRef(true);
+  const userPausedRef = useRef(false);
   const [isLoading, setIsLoading] = useState(false);
   const [repeat, setRepeat] = useState(false);
   const [played, setPlayed] = useState(0);
@@ -226,10 +227,10 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
           <button onClick={() => changeIndex(-1)} disabled={!isPlayerReady || isEmpty || realPlaylist.length <= 1}>
             <FontAwesomeIcon icon={faBackwardStep} style={{ fontSize: "1em" }} />
           </button>
-          <button onClick={() => setIsPlaying(false)} disabled={isEmpty} className={!isPlaying ? activeCls : ""}>
+          <button onClick={() => { userPausedRef.current = true; setIsPlaying(false); }} disabled={isEmpty} className={!isPlaying ? activeCls : ""}>
             <FontAwesomeIcon icon={faPause} style={{ fontSize: "1em" }} />
           </button>
-          <button onClick={() => setIsPlaying(true)} disabled={isEmpty} className={isPlaying && !isLoading ? activeCls : ""}>
+          <button onClick={() => { userPausedRef.current = false; setIsPlaying(true); }} disabled={isEmpty} className={isPlaying && !isLoading ? activeCls : ""}>
             <FontAwesomeIcon icon={isLoading ? faSpinner : faPlay} spin={isLoading} style={{ fontSize: "1em" }} />
           </button>
           <button onClick={() => changeIndex(1)} disabled={!isPlayerReady || isEmpty || realPlaylist.length <= 1}>
@@ -247,10 +248,10 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
         <button onClick={() => changeIndex(-1)} disabled={!isPlayerReady || isEmpty || realPlaylist.length <= 1} className="sideMusic-btn">
           <FontAwesomeIcon icon={faBackwardStep}  />
         </button>
-        <button onClick={() => setIsPlaying(false)} disabled={isEmpty} className={`sideMusic-btn ${!isPlaying ? "btn-active-side" : ""}`}>
+        <button onClick={() => { userPausedRef.current = true; setIsPlaying(false); }} disabled={isEmpty} className={`sideMusic-btn ${!isPlaying ? "btn-active-side" : ""}`}>
           <FontAwesomeIcon icon={faPause}  />
         </button>
-        <button onClick={() => setIsPlaying(true)} disabled={isEmpty} className={`sideMusic-btn ${isPlaying && !isLoading ? "btn-active-side" : ""}`}>
+        <button onClick={() => { userPausedRef.current = false; setIsPlaying(true); }} disabled={isEmpty} className={`sideMusic-btn ${isPlaying && !isLoading ? "btn-active-side" : ""}`}>
           <FontAwesomeIcon icon={isLoading ? faSpinner : faPlay} spin={isLoading}  />
         </button>
         <button onClick={() => changeIndex(1)} disabled={!isPlayerReady || isEmpty || realPlaylist.length <= 1} className="sideMusic-btn">
@@ -360,7 +361,14 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
                   style={{ display: "none" }}
                   loop={realPlaylist.length === 1 || repeat}
                   onPlay={(e) => { const a = e.target as HTMLAudioElement; a.volume = useMusicStore.getState().volume / 100; setIsPlaying(true); setIsLoading(false); setIsPlayerReady(true); setSongTitle(currentMusic?.title || ""); setSongArtist(currentMusic?.artist || ""); }}
-                  onPause={() => setIsPlaying(false)}
+                  onPause={(e) => {
+                    setIsPlaying(false);
+                    if (!userPausedRef.current) {
+                      setTimeout(() => {
+                        (e.target as HTMLAudioElement).play().catch(() => {});
+                      }, 1000);
+                    }
+                  }}
                   onWaiting={() => setIsLoading(true)}
                   onCanPlay={() => setIsLoading(false)}
                   onLoadedMetadata={(e) => {
