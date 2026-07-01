@@ -361,14 +361,7 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
                   style={{ display: "none" }}
                   loop={realPlaylist.length === 1 || repeat}
                   onPlay={(e) => { const a = e.target as HTMLAudioElement; a.volume = useMusicStore.getState().volume / 100; setIsPlaying(true); setIsLoading(false); setIsPlayerReady(true); setSongTitle(currentMusic?.title || ""); setSongArtist(currentMusic?.artist || ""); }}
-                  onPause={(e) => {
-                    setIsPlaying(false);
-                    if (!userPausedRef.current) {
-                      setTimeout(() => {
-                        (e.target as HTMLAudioElement).play().catch(() => {});
-                      }, 1000);
-                    }
-                  }}
+                  onPause={() => setIsPlaying(false)}
                   onWaiting={() => setIsLoading(true)}
                   onCanPlay={() => setIsLoading(false)}
                   onLoadedMetadata={(e) => {
