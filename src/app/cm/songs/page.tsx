@@ -265,9 +265,9 @@ export default function SongsPage() {
     if (editingSong) {
       ({ error } = await supabase.from("songs").update(data).eq("id", editingSong.id));
     } else {
-      const normalSongs = songs.filter((s) => s.id !== 1);
-      const maxOrder = normalSongs.length > 0 ? Math.max(...normalSongs.map((s) => s.sort_order)) : 0;
-      ({ error } = await supabase.from("songs").insert({ ...data, sort_order: maxOrder + 1 }));
+      const sorted = [...songs].sort((a, b) => b.sort_order - a.sort_order);
+      const secondMax = sorted.length > 1 ? sorted[1].sort_order : 0;
+      ({ error } = await supabase.from("songs").insert({ ...data, sort_order: secondMax + 1 }));
     }
     if (error) {
       alert(`저장 실패: ${error.message}`);
