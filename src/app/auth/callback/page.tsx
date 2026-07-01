@@ -13,17 +13,20 @@ export default function AuthCallbackPage() {
     if (exchanging) return;
     exchanging = true;
 
-    const code = new URL(window.location.href).searchParams.get("code");
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get("code");
+    const next = url.searchParams.get("next") ?? "/guestbook";
+
     if (!code) {
-      router.replace("/guestbook");
+      router.replace(next);
       exchanging = false;
       return;
     }
 
     supabaseClient.auth.exchangeCodeForSession(code).then(() => {
-      router.replace("/guestbook");
+      router.replace(next);
     }).catch(() => {
-      router.replace("/guestbook");
+      router.replace(next);
     }).finally(() => {
       exchanging = false;
     });

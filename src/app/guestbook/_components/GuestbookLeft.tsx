@@ -43,7 +43,7 @@ export function GuestbookLeft() {
           <div className="text-sm text-gray-400">로딩 중...</div>
         ) : !user ? (
           <button
-            onClick={signInWithGoogle}
+            onClick={() => signInWithGoogle()}
             className="px-4 py-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm"
           >
             Google 로그인

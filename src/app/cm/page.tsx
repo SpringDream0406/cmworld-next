@@ -33,7 +33,7 @@ export default function CmLoginPage() {
           <p className="text-red-400 text-sm">접근 권한이 없습니다.</p>
         ) : (
           <button
-            onClick={signInWithGoogle}
+            onClick={() => signInWithGoogle("/cm")}
             className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded font-medium transition-colors w-full"
           >
             Google로 로그인

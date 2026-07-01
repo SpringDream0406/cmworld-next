@@ -8,7 +8,7 @@ interface AuthStore {
   user: User | null;
   nickname: string | null;
   loading: boolean;
-  signInWithGoogle: () => Promise<void>;
+  signInWithGoogle: (next?: string) => Promise<void>;
   signOut: () => Promise<void>;
   fetchNickname: (userId: string) => Promise<void>;
   saveNickname: (nickname: string) => Promise<void>;
@@ -20,10 +20,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   nickname: null,
   loading: true,
 
-  signInWithGoogle: async () => {
+  signInWithGoogle: async (next?: string) => {
+    const redirectTo = `${window.location.origin}/auth/callback${next ? `?next=${next}` : ""}`;
     await supabaseClient.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: { redirectTo },
     });
   },
 
