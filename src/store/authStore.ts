@@ -50,6 +50,17 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   init: () => {
+    if (!get().loading) {
+      const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(async (_event, session) => {
+        const user = session?.user ?? null;
+        set({ user });
+        if (user) await get().fetchNickname(user.id);
+        else set({ nickname: null });
+        set({ loading: false });
+      });
+      return () => subscription.unsubscribe();
+    }
+
     const getSessionWithRetry = (retryCount = 0) => {
       const timeout = setTimeout(() => {
         if (retryCount < 3) getSessionWithRetry(retryCount + 1);
