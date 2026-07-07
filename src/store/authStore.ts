@@ -50,7 +50,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   init: () => {
+    const timeout = setTimeout(() => set({ loading: false }), 5000);
     supabaseClient.auth.getSession().then(async ({ data }) => {
+      clearTimeout(timeout);
       const user = data.session?.user ?? null;
       set({ user });
       if (user) await get().fetchNickname(user.id);
