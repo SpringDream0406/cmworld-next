@@ -56,6 +56,10 @@ export const profileData: ProfileSection[] = [
       //   iconUrl: "https://img.icons8.com/color/144/firebase.png",
       // },
       {
+        title: "Supabase",
+        iconUrl: "https://img.icons8.com/color/144/supabase.png",
+      },
+      {
         title: "AWS",
         iconUrl: "https://img.icons8.com/color/144/amazon-web-services.png",
       },
@@ -73,7 +77,7 @@ export const profileData: ProfileSection[] = [
       {
         title: "제이케이링크",
         description: "풀스택 개발자",
-        period: "2025.08 ~",
+        period: "2025.08 ~ 2026.07",
       },
       {
         title: "블루밍하트",

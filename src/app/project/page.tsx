@@ -1,27 +1,41 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useProjectStore } from "@/store";
 import { projectData } from "@/app/project/_data";
 import { ScSelect, TSelectOption } from "@/components/shadcn/ScSelect";
 import { openUrl } from "@/utils";
 
 export default function ProjectPage() {
-  const { selectedTag } = useProjectStore();
+  const { selectedTag, highlightTitle, setHighlightTitle } = useProjectStore();
+  const highlightRef = useRef<HTMLDivElement>(null);
+
   const filteredProjects =
     selectedTag === "Total"
       ? projectData
       : projectData.filter((project) => project.tags.includes(selectedTag));
 
-  //
+  useEffect(() => {
+    if (highlightTitle && highlightRef.current) {
+      highlightRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      const timer = setTimeout(() => setHighlightTitle(null), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [highlightTitle, setHighlightTitle]);
+
   return (
     <div className="w-full h-full p-4 overflow-auto">
       <h2 className="text-xl font-bold mb-4">
-        프로젝트 목록 ({filteredProjects.length}개)
+        {({ Total: "전체", Business: "비즈니스", Team: "팀", Personal: "개인" } as Record<string, string>)[selectedTag] ?? selectedTag} 프로젝트 목록 ({filteredProjects.length}개)
       </h2>
 
       <div className="space-y-6">
         {filteredProjects.map((project, index) => (
-          <div key={index} className="border rounded-lg p-4 bg-white shadow-sm">
+          <div
+            key={index}
+            ref={project.title === highlightTitle ? highlightRef : null}
+            className={`border rounded-lg p-4 bg-white shadow-sm transition-all duration-500 ${project.title === highlightTitle ? "border-blue-400 shadow-blue-100 shadow-md" : ""}`}
+          >
             <h3 className="text-xl font-bold mb-2">{project.title}</h3>
             <div className="text-sm mb-2">
               <span className="text-navy mr-4">{project.where}</span>
@@ -30,14 +44,12 @@ export default function ProjectPage() {
             <div className="w-full h-px bg-gray-200 my-2"></div>
             <p className="text-gray-700 font-semibold mb-3">{project.sub}</p>
 
-            {/* 설명 리스트 */}
             <ul className="text-sm text-gray-600 space-y-1 mb-3">
               {project.exp.map((exp, expIndex) => (
                 <li key={expIndex}>• {renderTextWithStrikethrough(exp)}</li>
               ))}
             </ul>
 
-            {/* 사이트 링크들 */}
             {project.site.selectOptions.length > 0 && (
               <div className="mt-3">
                 <ScSelect
@@ -60,20 +72,11 @@ export default function ProjectPage() {
   );
 }
 
-// 텍스트 렌더링 함수
 const renderTextWithStrikethrough = (text: string) => {
-  // ~~텍스트~~ 패턴을 찾아서 <del> 태그로 변환
   const parts = text.split(/(~~[^~]+~~)/g);
-
   return parts.map((part, index) => {
     if (part.startsWith("~~") && part.endsWith("~~")) {
-      // ~~ 제거하고 취소선 스타일 적용
-      const strikethroughText = part.slice(2, -2);
-      return (
-        <del key={index} className="text-gray-400">
-          {strikethroughText}
-        </del>
-      );
+      return <del key={index} className="text-gray-400">{part.slice(2, -2)}</del>;
     }
     return part;
   });

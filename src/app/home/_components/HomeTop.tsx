@@ -29,7 +29,7 @@ export const HomeTop = () => {
 
   const summaryItems = [
     { label: "공지사항", count: noticeList.length, href: "/home" },
-    { label: "프로젝트", count: projectData.length, href: "/project" },
+    { label: "프로젝트", count: projectData.length, href: "/project/history" },
     { label: "쥬크박스", count: songCount, href: "/jukebox" },
     { label: "놀이터", count: playgroundCount, href: "/playground" },
     { label: "방명록", count: guestbookCount, href: "/guestbook" },

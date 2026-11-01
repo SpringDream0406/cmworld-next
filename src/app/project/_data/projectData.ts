@@ -20,6 +20,7 @@ export const projectTags = {
   business: "Business",
   team: "Team",
   personal: "Personal",
+  y2026: "2026",
   y2025: "2025",
   y2024: "2024",
   y2023: "2023",
@@ -28,12 +29,65 @@ export const projectTags = {
 // 프로젝트 데이터
 export const projectData: IProjectData[] = [
   {
+    title: "CMWorld (Next.js)",
+    where: "개인 프로젝트",
+    when: "2026.06 ~ 진행 중",
+    sub: "CMWorld 포트폴리오 사이트 Next.js 리팩토링",
+    exp: [
+      "React + Firebase 기반의 기존 CMWorld를 Next.js + Supabase로 전면 리팩토링.",
+      "Next.js App Router 기반으로 구조 개편, SSR/CSR 혼합 렌더링 적용.",
+      "Firebase 방명록 → Supabase PostgreSQL 마이그레이션, Google OAuth 인증 연동.",
+      "Zustand persist로 뮤직 플레이어 상태 영속화, Web Audio API 기반 모바일 재생 처리.",
+      "Vercel 배포, 배경 설정·관리자 페이지(곡 관리) 등 신규 기능 추가.",
+    ],
+    site: {
+      selectOptions: [
+        {
+          name: "사이트",
+          url: "https://cmworld.springdream.kr",
+        },
+        {
+          name: "GitHub",
+          url: "https://github.com/SpringDream0406/cmworld-next",
+        },
+      ],
+    },
+    tags: [projectTags.personal, projectTags.y2026],
+  },
+  {
+    title: "Kidsnity",
+    where: "JKLink",
+    when: "2026.05 ~ 2026.07",
+    sub: "유아동 교구 전문 쇼핑몰 풀스택 개발",
+    exp: [
+      "NestJS + TypeORM 기반 REST API 서버 구축 및 React + Vite + Tailwind CSS 프론트엔드 개발.",
+      "상품 관리 (카테고리, 옵션, 재고, 추천 상품, 품절 처리) 구현.",
+      "장바구니, 바로구매, 무통장 입금 주문 플로우 구현.",
+      "관리자 페이지 (상품/주문/회원/배너/공지 관리) 개발.",
+      "AWS EC2 + RDS + S3 인프라 구성, Docker Compose 배포, GitHub Actions CI/CD 파이프라인 구축.",
+    ],
+    site: {
+      selectOptions: [
+        {
+          name: "키즈니티",
+          url: "https://www.kidsnity.com/",
+        },
+      ],
+    },
+    tags: [projectTags.business, projectTags.y2026],
+  },
+  {
     title: "GoingTogether",
     where: "JKLink",
-    when: "2025.01 ~ 진행 중",
-    sub: "체험학습 연계 앱",
+    when: "2025.01 ~ 2026.07",
+    sub: "체험 활동 예약·결제 O2O 플랫폼",
     exp: [
-      "체험학습 연계 앱의 백앤드를 맡아, 호스트 페이지, 서버, DB, 배포를 담당해서 개발 중입니다.",
+      "호스트가 체험 활동을 등록하고 사용자가 예약·결제할 수 있는 O2O 플랫폼.",
+      "React Native(Expo) 기반 iOS/Android 크로스플랫폼 앱 개발.",
+      "토스페이먼츠 카드·가상계좌 결제 연동 및 카카오 알림톡 자동 발송 구현.",
+      "Cron 기반 가상계좌 만료 자동 취소, 체험 완료 처리 등 자동화 구현.",
+      "Docker + GitHub Actions 기반 EC2 자동 배포 CI/CD 파이프라인 구축.",
+      "주요 기능: 체험 검색/찜, 예약/결제, 리뷰, 내 주변 체험(지도), 알림, 마이페이지, 호스트 관리 페이지",
     ],
     site: {
       selectOptions: [
@@ -42,38 +96,20 @@ export const projectData: IProjectData[] = [
           url: "https://host.going-together.co.kr",
         },
         {
-          name: "개발일지 (tistory)",
-          url: "https://springdream0406.tistory.com/category/Projects/GoingTogether",
+          name: "플레이스토어",
+          url: "https://play.google.com/store/apps/details?id=com.goingtogether.jklink&hl=ko",
         },
+        {
+          name: "앱스토어",
+          url: "https://apps.apple.com/kr/app/%EA%B3%A0%EC%9E%89%ED%88%AC%EA%B2%8C%EB%8D%94/id6746176536?l=en-GB",
+        },
+        // {
+        //   name: "개발일지 (tistory)",
+        //   url: "https://springdream0406.tistory.com/category/Projects/GoingTogether",
+        // },
       ],
     },
     tags: [projectTags.business, projectTags.y2025],
-  },
-  {
-    title: "CMSPP (CM Solar Power Plant)",
-    where: "개인 프로젝트",
-    when: "2024.06 ~ 진행 중",
-    sub: "태양광 발전 정보 저장/관리 사이트",
-    exp: [
-      "코딩에 관심을 두게 했던, 태양광 데이터 저장/관리를 위한 사이트를 제작 중입니다.",
-      "회원가입/로그인의 간편화와 보안을 위해 소셜로그인 기능을 사용했습니다.",
-      "보안을 위해 refeshToken과 accessToken 기능을 사용했습니다.",
-      "Netlify와 AWS를 활용해 배포를 진행했습니다.",
-      "CI/CD 자동화를 위해 Github Action를 사용했습니다.",
-    ],
-    site: {
-      selectOptions: [
-        // {
-        //   name: "사이트",
-        //   url: "https://front.cmspp.kr/",
-        // },
-        {
-          name: "개발일지 (tistory)",
-          url: "https://springdream0406.tistory.com/category/Projects/CMSPP%28CM%20Solar%20Power%20Plant%29",
-        },
-      ],
-    },
-    tags: [projectTags.personal, projectTags.y2024],
   },
   {
     title: "팜팜 서버 교체2",
@@ -103,10 +139,6 @@ export const projectData: IProjectData[] = [
         {
           name: "ERD (Nest.js)",
           url: "https://www.erdcloud.com/d/qezCTMmk7pf4SE4TQ",
-        },
-        {
-          name: "Swagger",
-          url: "http://43.201.93.123/api",
         },
       ],
     },
@@ -178,7 +210,7 @@ export const projectData: IProjectData[] = [
           url: "https://github.com/SpringDream0406/-GAI-kekeke",
         },
         {
-          name: "시연 연상 (Youtube)",
+          name: "시연 영상 (Youtube)",
           url: "https://youtu.be/A5MbFHJaqCA?si=2Qr1wjDJL3knaBpe",
         },
       ],

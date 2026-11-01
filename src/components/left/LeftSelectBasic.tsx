@@ -23,7 +23,7 @@ export const LeftSelectBasic = <T extends string>({
           size="lg"
           className={`w-full px-4 py-2 text-left rounded-lg transition-colors text-xl ${
             selected === value
-              ? "bg-basic text-white"
+              ? "bg-basic text-white hover:bg-basic"
               : "hover:bg-gray-200 text-gray-700"
           }`}
         >

@@ -25,13 +25,16 @@ export const Navigation = ({ className = "" }: NavigationProps) => {
 
   // 네비게이션 항목 렌더링
   const navigationBars = Object.entries(tags).map(([key, value]) => {
+    const href = key === "project" ? "/project/history" : `/${key}`;
     const isActive =
-      pathname === `/${key}` || (key === "home" && pathname === "/");
+      (key === "project" && pathname.startsWith("/project")) ||
+      pathname === `/${key}` ||
+      (key === "home" && pathname === "/");
 
     return (
       <Link
         key={key}
-        href={`/${key}`}
+        href={href}
         className={`w-[65px] h-[50px] flex justify-center items-center p-0.5 rounded-r-lg border-black border-t border-b border-r 
                    ${isActive ? "bg-white text-black" : "bg-basic text-white"}`}
       >

@@ -11,6 +11,7 @@ export const useProjectStore = create(
   combine(
     {
       selectedTag: "Total" as TagType,
+      highlightTitle: null as string | null,
     },
     (set) => ({
       // 필터 설정 (URL 동기화 포함)
@@ -19,12 +20,12 @@ export const useProjectStore = create(
         updateUrlParam("tag", filter);
       },
 
+      setHighlightTitle: (title: string | null) => set({ highlightTitle: title }),
+
       // URL에서 초기 필터 값 읽기
       initFromUrl: () => {
         const tag = getUrlParam("tag", "Total") as TagType;
-        if (tag !== "Total") {
-          set({ selectedTag: tag });
-        }
+        set({ selectedTag: tag });
       },
     })
   )
