@@ -4,7 +4,7 @@ export const updateVersionData = [
     sub: [
       {
         version: "- 3.0.1",
-        change: "프로젝트 히스토리 페이지 추가 및 UI 개선",
+        change: "프로젝트 및 히스토리 페이지 추가, 날씨 기반 배경 자동 설정",
         date: "2026-11-01",
         details: [
           "프로젝트 데이터 업데이트 (CMWorld Next, Kidsnity, GoingTogether 추가/수정)",
@@ -13,6 +13,8 @@ export const updateVersionData = [
           "쥬크박스 곡명/아티스트 컬럼 비율 조정",
           "태그 선택 호버 상태 버그 수정",
           "홈 공지사항 간격 조정",
+          "배경 자동 설정 기능 변경 (기본값: 광주 날씨 자동 적용, 설정에서 직접 선택 가능)",
+          "버전 상세 모달 추가",
         ],
       },
       {
