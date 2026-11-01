@@ -41,7 +41,7 @@ export const HomeTop = () => {
       <div className="h-[18%] text-2xl ml-3 flex items-center">공지사항</div>
       <div className="h-[82%] flex flex-row">
         {/* 공지사항 */}
-        <div className="w-[60%] h-full common-border">
+        <div className="w-[60%] h-full common-border overflow-y-auto">
           {noticeList.map((notice, index) => (
             <div
               key={index}
