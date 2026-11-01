@@ -142,6 +142,55 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [songTitle, songArtist]);
 
+  const keyboardStateRef = useRef({ isPlaying, isShuffleOn, volume, currentIndex, realPlaylistLength: 0 });
+  useEffect(() => {
+    keyboardStateRef.current = { isPlaying, isShuffleOn, volume, currentIndex, realPlaylistLength: realPlaylist.length };
+  });
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+      const { isPlaying, isShuffleOn, volume, currentIndex, realPlaylistLength } = keyboardStateRef.current;
+      switch (e.key) {
+        case " ":
+          e.preventDefault();
+          if (isPlaying) { userPausedRef.current = true; setIsPlaying(false); }
+          else { userPausedRef.current = false; setIsPlaying(true); }
+          break;
+        case "<":
+          if (realPlaylistLength > 0) {
+            const prev = currentIndex - 1;
+            setCurrentIndex(prev < 0 ? realPlaylistLength - 1 : prev);
+            setIsPlayerReady(false); setPlayed(0); setPlayedSeconds(0); setDuration("00:00");
+          }
+          break;
+        case ">":
+          if (realPlaylistLength > 0) {
+            const next = currentIndex + 1;
+            setCurrentIndex(next >= realPlaylistLength ? 0 : next);
+            setIsPlayerReady(false); setPlayed(0); setPlayedSeconds(0); setDuration("00:00");
+          }
+          break;
+        case "/": setIsShuffleOn(!isShuffleOn); break;
+        case ";": setShowPlaylist((p) => !p); setShowPlayingList(false); break;
+        case "'": setShowPlayingList((p) => !p); setShowPlaylist(false); break;
+        case "o": setRepeat((p) => !p); break;
+        case "ArrowUp":
+          e.preventDefault();
+          setVolume(Math.min(100, volume + 5));
+          setMuted(false);
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          setVolume(Math.max(0, volume - 5));
+          break;
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   if (!mounted) return null;
 
   const changeIndex = (delta: number) => {

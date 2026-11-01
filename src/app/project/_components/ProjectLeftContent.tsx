@@ -27,10 +27,13 @@ export const ProjectLeftContent = () => {
       <div className="w-full h-px bg-gray-200 my-1" />
       <LeftSelectBasic
         options={projectTags}
-        selected={isHistory ? "" : selectedTag}
+        selected={isHistory ? "" as typeof selectedTag : selectedTag}
         onSelect={(tag) => {
-          setTag(tag);
-          if (isHistory) router.push(`/project?tag=${tag}`);
+          if (isHistory) {
+            router.push(`/project?tag=${tag}`);
+          } else {
+            setTag(tag);
+          }
         }}
       />
     </div>

@@ -36,10 +36,10 @@ export default function JukeboxPage() {
 
       {/* 테이블 헤더 */}
       {viewSongs.length > 0 && (
-        <div className="px-4 py-2 bg-gray-50 border-b grid grid-cols-[40px_1fr_1fr] gap-2 text-xs text-gray-500 font-semibold shrink-0">
-          <div className="text-center">번호</div>
-          <div>곡명</div>
-          <div>아티스트</div>
+        <div className="px-4 py-2 bg-gray-50 border-b flex gap-4 text-xs text-gray-500 font-semibold shrink-0 overflow-y-scroll">
+          <div className="w-[40px] text-center shrink-0">번호</div>
+          <div className="flex-[2] min-w-0">곡명</div>
+          <div className="flex-[1] min-w-0">아티스트</div>
         </div>
       )}
 
@@ -53,10 +53,10 @@ export default function JukeboxPage() {
           viewSongs.map((music, index) => (
             <div
               key={index}
-              className="px-4 py-2 grid grid-cols-[40px_1fr_1fr] gap-2 items-center border-b hover:bg-blue-50 transition-colors group"
+              className="px-4 py-2 flex gap-4 items-center border-b hover:bg-blue-50 transition-colors group"
             >
               {/* 번호 / 재생 버튼 */}
-              <div className="text-center">
+              <div className="w-[40px] shrink-0 text-center">
                 <span className="text-xs text-gray-400 group-hover:hidden">
                   {index + 1}
                 </span>
@@ -71,7 +71,7 @@ export default function JukeboxPage() {
 
               {/* 곡명 */}
               <div
-                className="text-sm truncate cursor-pointer hover:text-basic"
+                className="flex-[2] min-w-0 text-sm truncate cursor-pointer hover:text-basic"
                 title={music.title}
                 onClick={() => setPlayMusics([music])}
               >
@@ -79,7 +79,7 @@ export default function JukeboxPage() {
               </div>
 
               {/* 아티스트 */}
-              <div className="text-sm text-gray-500 truncate" title={music.artist}>
+              <div className="flex-[1] min-w-0 text-sm text-gray-500 truncate" title={music.artist}>
                 {music.artist}
               </div>
             </div>

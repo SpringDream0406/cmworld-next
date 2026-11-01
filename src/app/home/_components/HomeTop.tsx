@@ -38,8 +38,8 @@ export const HomeTop = () => {
 
   return (
     <div className="h-full">
-      <div className="h-[15%] text-2xl ml-3 flex items-center">공지사항</div>
-      <div className="h-[85%] flex flex-row">
+      <div className="h-[18%] text-2xl ml-3 flex items-center">공지사항</div>
+      <div className="h-[82%] flex flex-row">
         {/* 공지사항 */}
         <div className="w-[60%] h-full common-border">
           {noticeList.map((notice, index) => (
