@@ -44,6 +44,7 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const isFirstLoad = useRef(true);
   const userPausedRef = useRef(false);
+  const playingListScrolledRef = useRef(false);
   const [isLoading, setIsLoading] = useState(false);
   const [repeat, setRepeat] = useState(false);
   const [played, setPlayed] = useState(0);
@@ -64,6 +65,8 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
   const playerRef = useRef<any>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const seekingRef = useRef(false);
+
+  useEffect(() => { if (!showPlayingList) playingListScrolledRef.current = false; }, [showPlayingList]);
 
   const realPlaylist = useMemo(
     () => (isShuffleOn ? shuffledPlaylist : playMusics),
@@ -330,8 +333,12 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
               {showPlayingList && (
                 <div className="h-full overflow-y-auto bg-black/65 rounded" ref={(el) => {
                   if (!el) return;
+                  if (playingListScrolledRef.current) return;
                   const active = el.querySelector("[data-active='true']") as HTMLElement;
-                  if (active && el.scrollTop === 0) el.scrollTop = active.offsetTop - el.clientHeight / 2 + active.clientHeight / 2;
+                  if (active) {
+                    el.scrollTop = active.offsetTop - el.clientHeight / 2 + active.clientHeight / 2;
+                    playingListScrolledRef.current = true;
+                  }
                 }}>
                   {realPlaylist.map((music, index) => (
                     <button
