@@ -30,7 +30,7 @@ export const noticeList: Notice[] = [
     id: 1,
     title: "업데이트 정보",
     content: <Notice1UpdateInfo />,
-    lastUpdate: "2026-06-24",
+    lastUpdate: "2026-11-01",
   },
   {
     id: 0,
