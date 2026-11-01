@@ -29,7 +29,7 @@ export const VersionDetailModal = ({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-xl shadow-xl w-[90%] max-w-md p-6"
+        className="bg-white rounded-xl shadow-xl w-[90%] max-w-xl p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-4">
@@ -45,11 +45,25 @@ export const VersionDetailModal = ({
           </button>
         </div>
         <ul className="space-y-1.5">
-          {details.map((detail, i) => (
-            <li key={i} className="text-sm text-gray-700">
-              • {detail}
-            </li>
-          ))}
+          {details.map((detail, i) => {
+            const match = detail.match(/^([^:]{1,10}):\s(.+)$/);
+            if (match) {
+              return (
+                <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                  <kbd className="px-1.5 py-0.5 text-xs font-mono bg-gray-100 border border-gray-300 rounded text-gray-800 shrink-0">
+                    {match[1]}
+                  </kbd>
+                  <span>{match[2]}</span>
+                </li>
+              );
+            }
+            return (
+              <li key={i} className="text-sm text-gray-700 flex gap-1">
+                <span className="shrink-0">•</span>
+                <span>{detail}</span>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

@@ -158,14 +158,14 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
           if (isPlaying) { userPausedRef.current = true; setIsPlaying(false); }
           else { userPausedRef.current = false; setIsPlaying(true); }
           break;
-        case "<":
+        case ",":
           if (realPlaylistLength > 0) {
             const prev = currentIndex - 1;
             setCurrentIndex(prev < 0 ? realPlaylistLength - 1 : prev);
             setIsPlayerReady(false); setPlayed(0); setPlayedSeconds(0); setDuration("00:00");
           }
           break;
-        case ">":
+        case ".":
           if (realPlaylistLength > 0) {
             const next = currentIndex + 1;
             setCurrentIndex(next >= realPlaylistLength ? 0 : next);

@@ -3,7 +3,8 @@
 import { useSettingStore } from "@/store";
 
 const BACKGROUNDS = [
-  { key: "Basic", label: "기본" },
+  { key: "Auto", label: "자동 (광주 날씨)" },
+  { key: "Basic", label: "없음" },
   { key: "Clear", label: "맑음" },
   { key: "Clouds", label: "흐림" },
   { key: "Rain", label: "비" },
@@ -26,11 +27,17 @@ export default function SettingPage() {
               background === key ? "border-blue-500 scale-[1.03]" : "border-transparent hover:border-gray-400"
             }`}
           >
-            <img
-              src={`/images/backgrounds/${key}.webp`}
-              alt={label}
-              className="w-full h-full object-cover"
-            />
+            {key === "Auto" ? (
+              <div className="w-full h-full bg-gradient-to-br from-sky-300 to-blue-500 flex items-center justify-center text-white text-2xl">
+                🌤
+              </div>
+            ) : (
+              <img
+                src={`/images/backgrounds/${key}.webp`}
+                alt={label}
+                className="w-full h-full object-cover"
+              />
+            )}
             <div className="absolute inset-x-0 bottom-0 bg-black/40 text-white text-xs py-1 text-center">
               {label}
             </div>

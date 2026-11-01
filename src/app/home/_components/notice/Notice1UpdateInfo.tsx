@@ -13,10 +13,6 @@ export const Notice1UpdateInfo = () => {
 
   return (
     <>
-      <p>안녕하세요.</p>
-      <p>CMWorld의 춘몽입니다.</p>
-      <br />
-
       {updateVersionData.map((item, index) => (
         <div className="flex flex-col p-2" key={index}>
           <div className="text-2xl text-blue-900">{item.title}</div>

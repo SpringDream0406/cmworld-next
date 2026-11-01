@@ -4,7 +4,7 @@ import { combine, persist } from "zustand/middleware";
 // 초기 상태 정의
 const initialState = {
   // 배경 설정 (기본값: 'Basic')
-  background: "Clear",
+  background: "Auto",
   // 마지막으로 재생한 플레이리스트를 localStorage에 저장할지 여부
   savePlaylist: false,
 };

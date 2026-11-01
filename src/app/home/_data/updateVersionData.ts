@@ -42,8 +42,8 @@ export const updateVersionData = [
         details: [
           "뮤직 플레이어를 키보드로 컨트롤 할 수 있도록 관련 기능 추가",
           "space: 음악 재생/정지",
-          "<: 이전 음악",
-          ">: 다음 음악",
+          ",: 이전 음악",
+          ".: 다음 음악",
           "/: 랜덤 재생",
           ";: 플레이 리스트",
           "': 플레잉 리스트",
@@ -58,7 +58,6 @@ export const updateVersionData = [
         change: "놀이터에 누나 뮤직 추가, 플레이어 관련 이미지 경로 정리",
         date: "2024-08-26",
         details: [
-          "코딩 알려주는 누나의 자바스크립트 스터디 팀플 결과물인 누나뮤직을 놀이터에 추가",
           "images 폴더에 있던 뮤직플레이어 관련 아이콘들을 musicPlayerIcons 폴더로 정리",
         ],
       },
@@ -76,7 +75,6 @@ export const updateVersionData = [
         date: "2024-06-16",
         details: [
           "사이트 탭 아이콘 추가 (달)",
-          "프로젝트에 CMSPP 프로젝트 추가",
         ],
       },
       {
