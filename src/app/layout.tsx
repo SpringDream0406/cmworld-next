@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google"; // 시스템 기본 폰트 대체용 (선택사항)
 import "./globals.css";
 import { LayoutSelector } from "@/components/layouts";
+import Script from "next/script";
+
+const GA_ID = "G-GB7GDWD03Z";
 
 // Inter 폰트 설정 (기존 프로젝트의 시스템 폰트와 유사)
 const inter = Inter({
@@ -59,6 +62,13 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable}`} suppressHydrationWarning>
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+        <Script id="ga" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${GA_ID}');
+        `}</Script>
         {/* 모바일인지, musicplayer 경로인지 체크 후 반영 */}
         <LayoutSelector>{children}</LayoutSelector>
       </body>
