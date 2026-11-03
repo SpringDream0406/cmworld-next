@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import icon from "@/app/icon.png";
 import { supabase } from "@/lib/supabase";
 import { useAuthStore } from "@/store";
 import { playlists, TPlaylistKey } from "@/data/musicData";
@@ -306,19 +308,22 @@ export default function SongsPage() {
 
   return (
     <div className="h-screen flex flex-col p-6 max-w-5xl mx-auto">
-      <div className="flex items-center justify-between mb-6 shrink-0">
+      <div className="relative flex items-center justify-between mb-6 shrink-0">
         <h1 className="text-2xl font-bold">곡 관리 ({filteredSongs.length})</h1>
+        <button onClick={() => router.push("/home")} className="absolute left-1/2 -translate-x-1/2 bg-transparent hover:opacity-70 transition-opacity cursor-pointer">
+          <Image src={icon} alt="홈" width={32} height={32} />
+        </button>
         <div className="flex gap-2">
           <button
             onClick={handleCheck}
             disabled={checking}
-            className="px-4 py-2 bg-yellow-700 hover:bg-yellow-600 disabled:opacity-50 rounded font-medium transition-colors text-sm"
+            className="px-4 py-2 bg-yellow-700 hover:bg-yellow-600 disabled:opacity-50 rounded font-medium transition-colors text-sm cursor-pointer"
           >
             {checking ? "체크 중..." : "재생 가능 체크"}
           </button>
           <button
             onClick={openAdd}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded font-medium transition-colors"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded font-medium transition-colors cursor-pointer"
           >
             + 곡 추가
           </button>
@@ -377,7 +382,7 @@ export default function SongsPage() {
       )}
 
       {showForm && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[60] p-4">
           <div className="bg-gray-800 rounded-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-bold mb-4">
               {editingSong ? "곡 수정" : "곡 추가"}
@@ -463,28 +468,62 @@ export default function SongsPage() {
           <div className="bg-gray-800 rounded-xl p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold">유튜브 체크 결과</h2>
-              <button onClick={() => setCheckResults(null)} className="text-gray-400 hover:text-white text-xl">✕</button>
+              <div className="flex gap-2 items-center">
+                <button
+                  onClick={handleCheck}
+                  disabled={checking}
+                  className="px-3 py-1 text-xs bg-yellow-700 hover:bg-yellow-600 disabled:opacity-50 rounded transition-colors"
+                >
+                  {checking ? "체크 중..." : "↺ 재체크"}
+                </button>
+                <button onClick={() => setCheckResults(null)} className="text-gray-400 hover:text-white text-xl">✕</button>
+              </div>
             </div>
             <p className="text-sm text-gray-400 mb-4">총 {checkResults.total}곡 중 재생 불가 {checkResults.unavailable.length}곡</p>
             {checkResults.unavailable.length === 0 ? (
               <p className="text-sm text-green-400">모두 정상 재생 가능</p>
             ) : (
-              <ul className="flex flex-col gap-1">
-                {checkResults.unavailable.map((s) => (
-                  <li key={s.id} className="text-sm bg-gray-700 rounded px-3 py-1.5 flex items-center gap-2">
-                    <span className="text-gray-400 text-xs">#{s.id}</span>
-                    <span className="flex-1">{s.artist} - {s.title}</span>
-                    <span className="text-xs text-red-400 shrink-0">{s.reason}</span>
-                    <a
-                      href={`https://www.youtube.com/watch?v=${s.url}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-xs text-blue-400 hover:underline shrink-0"
-                    >
-                      {s.url}
-                    </a>
-                  </li>
-                ))}
+              <ul className="flex flex-col gap-2">
+                {checkResults.unavailable.map((s) => {
+                  const song = songs.find((song) => song.id === s.id);
+                  return (
+                    <li key={s.id} className="text-sm bg-gray-700 rounded px-3 py-2 flex flex-col gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-400 text-xs">#{s.id}</span>
+                        <span className="flex-1">{s.artist} - {s.title}</span>
+                        <span className="text-xs text-red-400 shrink-0">{s.reason}</span>
+                        <a
+                          href={`https://www.youtube.com/watch?v=${s.url}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs text-blue-400 hover:underline shrink-0"
+                        >
+                          {s.url}
+                        </a>
+                      </div>
+                      <div className="flex gap-2 justify-end">
+                        <button
+                          onClick={() => { if (song) { toggleActive(song); setCheckResults((prev) => prev ? { ...prev, unavailable: prev.unavailable.filter((u) => u.id !== s.id) } : prev); } }}
+                          className="px-2 py-1 text-xs bg-gray-600 hover:bg-gray-500 rounded transition-colors"
+                        >
+                          비활성화
+                        </button>
+                        <button
+                          onClick={() => { if (song) openEdit(song); }}
+                          className="px-2 py-1 text-xs bg-gray-600 hover:bg-gray-500 rounded transition-colors"
+                        >
+                          수정
+                        </button>
+                        <button
+                          onClick={async () => { await handleDelete(s.id); setCheckResults((prev) => prev ? { ...prev, unavailable: prev.unavailable.filter((u) => u.id !== s.id) } : prev); }}
+                          className="px-2 py-1 text-xs bg-red-900 hover:bg-red-800 rounded transition-colors"
+                        >
+                          삭제
+                        </button>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>
