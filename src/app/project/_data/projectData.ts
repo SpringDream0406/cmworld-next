@@ -35,8 +35,8 @@ export const projectData: IProjectData[] = [
     sub: "CMWorld 포트폴리오 사이트 Next.js 리팩토링",
     exp: [
       "React + Firebase 기반의 기존 CMWorld를 Next.js + Supabase로 전면 리팩토링.",
-      "Firebase 방명록 → Supabase PostgreSQL 마이그레이션, Google OAuth 인증 연동.",
-      "Zustand persist로 뮤직 플레이어 상태 영속화, Web Audio API 기반 모바일 재생 처리.",
+      "Firebase → Supabase PostgreSQL 마이그레이션, Google OAuth 인증 연동.",
+      "Zustand로 전역 상태 관리.",
       "Vercel 배포, 배경 설정·관리자 페이지(곡 관리) 등 신규 기능 추가.",
     ],
     site: {
