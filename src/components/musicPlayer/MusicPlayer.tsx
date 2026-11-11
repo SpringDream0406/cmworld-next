@@ -83,7 +83,7 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
     : songTitle
       ? `${songTitle} - ${songArtist}`
       : isPlayer
-        ? "CM Music을 눌러 플레이리스트를 선택해주세요."
+        ? "상단의 CM Music을 클릭"
         : "쥬크박스에서 노래를 선택해주세요";
 
   useEffect(() => {
@@ -105,8 +105,6 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
     setCurrentIndex(0);
     if (isFirstLoad.current) {
       isFirstLoad.current = false;
-    } else if (playMusics.length > 0) {
-      setIsPlaying(true);
     }
   }, [playMusics]);
 
@@ -349,7 +347,7 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
               <button
                 onClick={() => { setShowPlayingList((p) => !p); setShowPlaylist(false); }}
                 className="border-none bg-transparent outline-none cursor-pointer"
-                style={{ color: showPlayingList ? "pink" : "rgba(255,255,255,0.6)" }}
+                style={{ color: showPlayingList ? "pink" : "rgba(255,255,255,0.6)", opacity: isEmpty ? 0.3 : 1, pointerEvents: isEmpty ? "none" : "auto" }}
               >
                 <svg className="player-playlist-icon" viewBox="0 0 24 24" fill="currentColor">
                   <rect x="3" y="5" width="14" height="2" rx="1" />
@@ -404,9 +402,15 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
               )}
               {/* 영상/썸네일 - 목록 안 띄울 때만 보임 */}
               <div style={{ height: showPlaylist || showPlayingList ? 0 : "100%", overflow: "hidden" }}>
-                {nasMode && currentMusic?.url
-                  ? <img src={`https://img.youtube.com/vi/${currentMusic.url}/hqdefault.jpg`} alt={songTitle} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }} />
-                  : reactPlayerEl(false)
+                {isEmpty
+                  ? <div className="w-full h-full flex items-center justify-center rounded-lg bg-black/30 p-4 text-center text-white/80 text-sm leading-relaxed">
+                      모바일은 뮤직플레이어만 지원합니다.<br /><br />
+                      상단의 CM Music 영역을 눌러 플레이리스트를 가져올 수 있으며,<br /><br />
+                      오른쪽 상단이나 화면에 뜨는 곡 정보를 눌러 해당 플레이리스트에 있는 곡 리스트를 보고 변경할 수 있습니다.
+                    </div>
+                  : nasMode && currentMusic?.url
+                    ? <img src={`https://img.youtube.com/vi/${currentMusic.url}/hqdefault.jpg`} alt={songTitle} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }} />
+                    : reactPlayerEl(false)
                 }
               </div>
               {/* nasMode 오디오 플레이어 - native audio 태그 직접 사용 */}
@@ -444,7 +448,7 @@ const MusicPlayer = ({ nasMode = false }: { nasMode?: boolean }) => {
             </div>
 
             {/* 곡 정보 */}
-            <div className="h-[15%] overflow-hidden cursor-pointer" onClick={() => { setShowPlayingList((p) => !p); setShowPlaylist(false); }}>
+            <div className={`h-[15%] overflow-hidden ${isEmpty ? "pointer-events-none" : "cursor-pointer"}`} onClick={() => { setShowPlayingList((p) => !p); setShowPlaylist(false); }}>
               {/* 모바일: 정적 타이틀/아티스트 */}
               <div className="song-info-mobile player-mobile-only">
                 <div className="song-title" style={showPlayingList ? { color: "pink" } : {}}>
